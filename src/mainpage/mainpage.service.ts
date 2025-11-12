@@ -1,26 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMainpageDto } from './dto/create-mainpage.dto';
-import { UpdateMainpageDto } from './dto/update-mainpage.dto';
+import { CreateProfileDto } from './dto/create-mainpage.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Main } from './entities/mainpage.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class MainpageService {
-  create(createMainpageDto: CreateMainpageDto) {
-    return 'This action adds a new mainpage';
-  }
+  constructor(
+    @InjectModel(Main.name) private readonly MainRepo : Model<Main>
+  ){}
 
-  findAll() {
-    return `This action returns all mainpage`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} mainpage`;
-  }
-
-  update(id: number, updateMainpageDto: UpdateMainpageDto) {
-    return `This action updates a #${id} mainpage`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mainpage`;
+  async create(data : CreateProfileDto){
+    return await this.MainRepo.create(data)
   }
 }

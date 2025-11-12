@@ -7,9 +7,14 @@ import { ViewersModule } from './viewers/viewers.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ContactModule } from './contact/contact.module';
 import { BotModule } from './bot/bot.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 @Module({
-  imports: [MainpageModule, BlogModule, ViewersModule, ProjectsModule, ContactModule, BotModule],
+  imports: [
+    MongooseModule.forRoot(process.env.DB || ""),
+    MainpageModule, BlogModule, ViewersModule, ProjectsModule, ContactModule, BotModule],
   controllers: [AppController],
   providers: [AppService],
 })
