@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -8,27 +8,38 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Post()
-  create(@Body() createContactDto: CreateContactDto) {
-    return this.contactService.create(createContactDto);
+  async create(dto : CreateContactDto){
+    try {
+      return await this.contactService.create(dto)
+    } catch (error) {
+      throw new HttpException(error.message , error.status)
+    }
   }
 
   @Get()
-  findAll() {
-    return this.contactService.findAll();
+  async getAll(){
+    try {
+      return await this.contactService.find()
+    } catch (error) {
+      throw new HttpException(error.message , error.status)
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contactService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {
-    return this.contactService.update(+id, updateContactDto);
+  async getOne(@Param('id') id : string){
+    try {
+      return await this.contactService.findById(id)
+    } catch (error) {
+      throw new HttpException(error.message , error.status)
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contactService.remove(+id);
+  async deleteOne(@Param('id') id : string){
+    try {
+      return await this.contactService.findById(id)
+    } catch (error) {
+      throw new HttpException(error.message , error.status)
+    }
   }
 }
