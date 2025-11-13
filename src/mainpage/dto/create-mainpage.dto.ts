@@ -6,7 +6,7 @@ export class CreateProfileDto {
 
   @IsString()
   @IsOptional()
-  avatar?: string;
+  photos?: string[];
 
   @IsString()
   profession: string;
@@ -16,11 +16,9 @@ export class CreateProfileDto {
   profession_add?: string;
 
   @IsString()
-  @IsOptional()
   address?: string;
 
   @IsUrl()
-  @IsOptional()
   github?: string;
 
   @IsUrl()
@@ -31,16 +29,16 @@ export class CreateProfileDto {
   @IsOptional()
   linkedin?: string;
 
-  @IsUrl()
+  @IsString()
   @IsOptional()
+  @IsUrl()
   cv?: string;
 
+
   @IsArray()
-  @IsOptional()
   skills?: string[];
 
   @IsArray()
-  @IsOptional()
   tools?: string[];
 }
 

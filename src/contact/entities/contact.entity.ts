@@ -13,7 +13,7 @@ export class Contact {
     theme : string
 
     @Prop()
-    message : string
+    text : string
 }
 
 export const ContactSchema = SchemaFactory.createForClass(Contact)

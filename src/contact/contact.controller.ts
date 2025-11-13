@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
-import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller('contact')
 export class ContactController {
@@ -37,7 +36,7 @@ export class ContactController {
   @Delete(':id')
   async deleteOne(@Param('id') id : string){
     try {
-      return await this.contactService.findById(id)
+      return await this.contactService.deleteById(id)
     } catch (error) {
       throw new HttpException(error.message , error.status)
     }

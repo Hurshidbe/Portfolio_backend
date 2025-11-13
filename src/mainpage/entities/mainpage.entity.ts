@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 @Schema()
 export class Main {
     @Prop()
-    avatar : string
+    photos : string[]
 
     @Prop()
     full_name : string
@@ -29,10 +29,10 @@ export class Main {
     @Prop()
     cv : string // CV URI
 
-    @Prop()
+    @Prop([String])
     skills : string[]
 
-    @Prop()
+    @Prop([String])
     tools : string[]
 
 }

@@ -13,4 +13,17 @@ export class MainpageService {
   async create(data : CreateProfileDto){
     return await this.MainRepo.create(data)
   }
+
+  async normalizeArrayFields(dto: any, fields: string[]) {
+  for (const field of fields) {
+    const value = dto[field] as any;
+    if (typeof value === 'string') {
+      dto[field] = value
+        .split(',')
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+    }
+  }
+}
+
 }

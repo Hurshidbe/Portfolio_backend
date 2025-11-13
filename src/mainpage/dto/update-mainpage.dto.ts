@@ -8,7 +8,7 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsString()
-  avatar?: string;
+  photos?: string[];
 
   @IsOptional()
   @IsString()
@@ -36,7 +36,7 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsUrl()
-  cv?: string;
+  cv?: string[];
 
   @IsOptional()
   @IsArray()
