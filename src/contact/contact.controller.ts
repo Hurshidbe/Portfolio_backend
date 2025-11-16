@@ -6,8 +6,8 @@ import { CreateContactDto } from './dto/create-contact.dto';
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
-  @Post()
-  async create(dto : CreateContactDto){
+  @Post('send')
+  async create(@Body() dto : CreateContactDto){
     try {
       return await this.contactService.create(dto)
     } catch (error) {

@@ -15,6 +15,6 @@ export class CreateContactDto {
 
     @IsString()
     @Length(2,1000)
-    message : string
+    text : string
     
 }

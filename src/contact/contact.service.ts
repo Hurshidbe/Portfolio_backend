@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Contact } from './entities/contact.entity';
-import { Mode } from 'fs';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class ContactService {
  ){}
 
  async create(dto : CreateContactDto){
-  return await this.ContactRepo.create(dto)
+  return await this.ContactRepo.create({name : dto.name, phone_tg: dto.phone_tg , text : dto.text , theme : dto.theme})
  }
 
  async find(){
@@ -24,6 +23,6 @@ export class ContactService {
  }
 
  async deleteById(id : string){
-  return await this.ContactRepo.deleteOne({_id : id}  )
+  return await this.ContactRepo.deleteOne({_id : id})
  }
 }
