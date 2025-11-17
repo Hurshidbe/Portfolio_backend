@@ -65,7 +65,7 @@ export class MainpageController {
 
       return await this.mainpageService.create(createMainpageDto);
     } catch (error: any) {
-      throw new HttpException(error.message || 'Server error', error.status || 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
   @Patch(':id')
@@ -109,7 +109,7 @@ async update(
 
     return await this.mainpageService.updateById(id, updateMainpageDto);
   } catch (error: any) {
-    throw new HttpException(error.message || 'Server error', error.status || 500);
+    throw new HttpException(error.message , error.status || 500);
   }
 }
 
@@ -125,7 +125,7 @@ async update(
       const filepath = path.join(cvFolder, files[0]); 
       res.download(filepath, files[0]);
     } catch (error: any) {
-      throw new HttpException(error.message , error.status);
+      throw new HttpException(error.message , error.status||500);
     }
   }
 
@@ -134,7 +134,7 @@ async update(
     try {
       return await this.mainpageService.find()
     } catch (error) {
-      throw new HttpException(error.message , error.status)
+      throw new HttpException(error.message , error.status||500)
     }
   }
 }

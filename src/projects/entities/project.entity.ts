@@ -4,13 +4,13 @@ import { CreateBlogDto } from "src/blog/dto/create-blog.dto";
 @Schema({timestamps : true})
 export class Project {
     
-    @Prop()
+    @Prop({default : []})
     photos : string[]
 
     @Prop()
     project_name : string
 
-    @Prop()
+    @Prop({default : ''})
     description : string
 
     @Prop()
