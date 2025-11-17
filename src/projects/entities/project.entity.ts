@@ -24,6 +24,14 @@ export class Project {
 
     @Prop({required : false, default : Date.now()})
     deployed_date : Date
+
+    /////////////////////////////////////////////////////////////
+
+    @Prop({default : 0})
+    likes : number
+
+    @Prop({default : 0})
+    views : number
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project)

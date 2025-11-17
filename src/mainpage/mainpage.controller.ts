@@ -9,6 +9,7 @@ import {
   Res,
   Param,
   Patch,
+  Req,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MainpageService } from './mainpage.service';
@@ -16,13 +17,16 @@ import { CreateProfileDto } from './dto/create-mainpage.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Response } from 'express';
+import type { Request } from 'express';
+import { ViewersService } from 'src/viewers/viewers.service';
+
 
 @Controller('mainpage')
 export class MainpageController {
   constructor(
     private readonly mainpageService: MainpageService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly viewerService : ViewersService
   ) {}
 
   @Post()
@@ -130,8 +134,9 @@ async update(
   }
 
   @Get()
-  async getMainPage(){
+  async getMainPage(@Req() req : Request){
     try {
+      await this.viewerService.create(req.ip||"", req.headers['user-agent']||"")
       return await this.mainpageService.find()
     } catch (error) {
       throw new HttpException(error.message , error.status||500)

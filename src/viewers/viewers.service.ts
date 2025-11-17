@@ -1,26 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { CreateViewerDto } from './dto/create-viewer.dto';
-import { UpdateViewerDto } from './dto/update-viewer.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Viewer, viewerSchema } from './entities/viewer.entity';
+import { Model } from 'mongoose';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ViewersService {
-  create(createViewerDto: CreateViewerDto) {
-    return 'This action adds a new viewer';
+  constructor(
+    @InjectModel(Viewer.name)  private readonly ViewersRepo : Model<Viewer> 
+  ){}
+
+  async create(ip_address : string, device_info : string) {
+    if((await this.ViewersRepo.find({ip_address})).length===0 )
+    return await this.ViewersRepo.create({ip_address, device_info})
   }
 
-  findAll() {
-    return `This action returns all viewers`;
+  async findAll() {
+    return await this.ViewersRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} viewer`;
-  }
-
-  update(id: number, updateViewerDto: UpdateViewerDto) {
-    return `This action updates a #${id} viewer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} viewer`;
+  async viewCount(){
+    return (await this.ViewersRepo.find()).length
   }
 }
