@@ -15,8 +15,8 @@ export class Experience {
     @Prop()
     from : Date
 
-    @Prop({default : Date.now()})
-    to? : Date
+    @Prop({ type: Date , required : false, })
+    to: Date;
 
 }
 

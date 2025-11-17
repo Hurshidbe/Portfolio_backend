@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateExperienceDto } from './dto/create-experience.dto';
 import { UpdateExperienceDto } from './dto/update-experience.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Experience } from './entities/experience.entity';
+import { Model } from 'mongoose';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ExperienceService {
-  create(createExperienceDto: CreateExperienceDto) {
-    return 'This action adds a new experience';
+  constructor(@InjectModel(Experience.name) private readonly experienceRepo: Model<Experience>){}
+  async create(createExperienceDto: CreateExperienceDto) {
+    return await this.experienceRepo.create(createExperienceDto);
   }
 
-  findAll() {
-    return `This action returns all experience`;
+  async findAll() {
+    return await this.experienceRepo.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} experience`;
+  async findOne(id: string) {
+  const data = await this.experienceRepo.findById(id);
+  if (!data) throw new NotFoundException('data not found by this Id')
+  return data;
   }
 
-  update(id: number, updateExperienceDto: UpdateExperienceDto) {
-    return `This action updates a #${id} experience`;
+
+  async update(id: string, dto: UpdateExperienceDto) {
+  const updated = await this.experienceRepo.findByIdAndUpdate(id, dto, { new: true })
+  if (!updated) throw new NotFoundException('data not found by this Id')
+  return updated;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} experience`;
+
+  async remove(id: string) {
+  const deleted = await this.experienceRepo.findByIdAndDelete(id);
+  if (!deleted) throw new NotFoundException('data not found by this Id');
+  return deleted;
   }
 }
