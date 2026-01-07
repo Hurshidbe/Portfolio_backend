@@ -10,13 +10,21 @@ import { BotModule } from './bot/bot.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ExperienceModule } from './experience/experience.module';
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DB || ""),
-    MainpageModule, BlogModule, ViewersModule, ProjectsModule, ContactModule, BotModule, CloudinaryModule, ExperienceModule],
+    MongooseModule.forRoot(process.env.DB || ''),
+    MainpageModule,
+    BlogModule,
+    ViewersModule,
+    ProjectsModule,
+    ContactModule,
+    BotModule,
+    CloudinaryModule,
+    ExperienceModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -7,12 +7,10 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import { ViewersModule } from 'src/viewers/viewers.module';
 
 @Module({
-  imports : [
-    MongooseModule.forFeature([
-      {schema : MainSchema , name : Main.name}
-    ]),
+  imports: [
+    MongooseModule.forFeature([{ schema: MainSchema, name: Main.name }]),
     CloudinaryModule,
-    ViewersModule
+    ViewersModule,
   ],
   controllers: [MainpageController],
   providers: [MainpageService],

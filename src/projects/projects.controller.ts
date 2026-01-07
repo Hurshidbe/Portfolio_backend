@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+  HttpException,
+} from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -14,27 +25,29 @@ export class ProjectsController {
 
   @Post()
   @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        {name : 'photos' , maxCount : 3}
-      ],
-      {limits : {fileSize : 5*1024*1024}}
-    )
+    FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }], {
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
   )
   async create(
-    @UploadedFiles() files : {photos? :Express.Multer.File[]},
-    @Body() createProjectDto: CreateProjectDto
+    @UploadedFiles() files: { photos?: Express.Multer.File[] },
+    @Body() createProjectDto: CreateProjectDto,
   ) {
-      try {
-        await this.projectsService.normalizeArrayFields(createProjectDto, ['tecnologies']);
-        const photosResults = files.photos?.length
-        ? await Promise.all(files.photos.map(file => this.cloudinaryService.uploadImage(file))):[]
-        createProjectDto.photos = photosResults.map(r=>r.secure_url)
+    try {
+      await this.projectsService.normalizeArrayFields(createProjectDto, [
+        'tecnologies',
+      ]);
+      const photosResults = files.photos?.length
+        ? await Promise.all(
+            files.photos.map((file) =>
+              this.cloudinaryService.uploadImage(file),
+            ),
+          )
+        : [];
+      createProjectDto.photos = photosResults.map((r) => r.secure_url);
 
-        return await this.projectsService.create(createProjectDto||500)
-      } catch (error) {
-        
-      }
+      return await this.projectsService.create(createProjectDto || 500);
+    } catch (error) {}
   }
 
   @Get()
@@ -42,51 +55,53 @@ export class ProjectsController {
     try {
       return this.projectsService.findAll();
     } catch (error) {
-      throw new HttpException(error.message , error.status||500)
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-     try {
+    try {
       return this.projectsService.findOne(id);
     } catch (error) {
-      throw new HttpException(error.message , error.status||500)
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Patch(':id')
-  @UseInterceptors(FileFieldsInterceptor(
-    [
-      {name : 'photos' , maxCount : 3}
-    ]
-  ))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }]))
   async update(
-    @UploadedFiles() files : {photos? : Express.Multer.File[]},
-    @Param('id') id: string, 
-    @Body() updateProjectDto: UpdateProjectDto) {
-
+    @UploadedFiles() files: { photos?: Express.Multer.File[] },
+    @Param('id') id: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+  ) {
     try {
-      await this.projectsService.normalizeArrayFields(updateProjectDto, ['tecnologies']);
+      await this.projectsService.normalizeArrayFields(updateProjectDto, [
+        'tecnologies',
+      ]);
       const photosResults = files.photos?.length
-      ? await Promise.all(files.photos.map(file => this.cloudinaryService.uploadImage(file)))
-      : [];
-    if (photosResults.length) {
-      updateProjectDto.photos = photosResults.map(r => r.secure_url);
-    }
+        ? await Promise.all(
+            files.photos.map((file) =>
+              this.cloudinaryService.uploadImage(file),
+            ),
+          )
+        : [];
+      if (photosResults.length) {
+        updateProjectDto.photos = photosResults.map((r) => r.secure_url);
+      }
 
-    return this.projectsService.update(id, updateProjectDto);
+      return this.projectsService.update(id, updateProjectDto);
     } catch (error) {
-      throw new HttpException(error.message , error.status||500)
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     try {
-      return this.projectsService.remove(id); 
+      return this.projectsService.remove(id);
     } catch (error) {
-      throw new HttpException(error.message , error.status||500)
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }

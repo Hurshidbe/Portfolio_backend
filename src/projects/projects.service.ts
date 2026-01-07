@@ -7,10 +7,12 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class ProjectsService {
-  constructor(@InjectModel(Project.name) private readonly projectsRepo : Model<Project>){}
+  constructor(
+    @InjectModel(Project.name) private readonly projectsRepo: Model<Project>,
+  ) {}
 
   async create(createProjectDto: CreateProjectDto) {
-    return await this.projectsRepo.create(createProjectDto)
+    return await this.projectsRepo.create(createProjectDto);
   }
 
   async findAll() {
@@ -19,30 +21,32 @@ export class ProjectsService {
 
   async findOne(id: string) {
     const data = await this.projectsRepo.findById(id);
-    if(!data) throw new NotFoundException('projects not found')
-      return data
+    if (!data) throw new NotFoundException('projects not found');
+    return data;
   }
 
   async update(id: string, updateProjectDto: UpdateProjectDto) {
     const data = await this.projectsRepo.findById(id);
-    if(!data) throw new NotFoundException('projects not found')
-      return await this.projectsRepo.findByIdAndUpdate(id , updateProjectDto, {new : true})
+    if (!data) throw new NotFoundException('projects not found');
+    return await this.projectsRepo.findByIdAndUpdate(id, updateProjectDto, {
+      new: true,
+    });
   }
 
   async remove(id: string) {
     const data = await this.projectsRepo.findById(id);
-    if(!data) throw new NotFoundException('projects not found') 
-    return await this.projectsRepo.findByIdAndDelete(id)  
+    if (!data) throw new NotFoundException('projects not found');
+    return await this.projectsRepo.findByIdAndDelete(id);
   }
 
   async normalizeArrayFields(dto: any, fields: string[]) {
-  for (const field of fields) {
-    const value = dto[field] as any;
-    if (typeof value === 'string') {
-      dto[field] = value
-        .split(',')
-        .map((item: string) => item.trim())
-        .filter(Boolean);
+    for (const field of fields) {
+      const value = dto[field];
+      if (typeof value === 'string') {
+        dto[field] = value
+          .split(',')
+          .map((item: string) => item.trim())
+          .filter(Boolean);
       }
     }
   }

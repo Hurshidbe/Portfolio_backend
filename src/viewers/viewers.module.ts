@@ -5,13 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Viewer, viewerSchema } from './entities/viewer.entity';
 
 @Module({
-  imports : [
-    MongooseModule.forFeature([
-      {name : Viewer.name , schema : viewerSchema}
-    ])
+  imports: [
+    MongooseModule.forFeature([{ name: Viewer.name, schema: viewerSchema }]),
   ],
   controllers: [ViewersController],
   providers: [ViewersService],
-  exports : [ViewersService]
+  exports: [ViewersService],
 })
 export class ViewersModule {}

@@ -7,36 +7,36 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Post('send')
-  async create(@Body() dto : CreateContactDto){
+  async create(@Body() dto: CreateContactDto) {
     try {
-      return await this.contactService.create(dto)
+      return await this.contactService.create(dto);
     } catch (error) {
-      throw new HttpException(error.message , error.status)
+      throw new HttpException(error.message, error.status  || 500);
     }
   }
 
   @Get()
-  async getAll(){
+  async getAll() {
     try {
-      return await this.contactService.find()
+      return await this.contactService.find();
     } catch (error) {
-      throw new HttpException(error.message , error.status)
+      throw new HttpException(error.message, error.status);
     }
   }
 
   @Get(':id')
-  async getOne(@Param('id') id : string){
+  async getOne(@Param('id') id: string) {
     try {
-      return await this.contactService.findById(id)
+      return await this.contactService.findById(id);
     } catch (error) {
-      throw new HttpException(error.message , error.status)
+      throw new HttpException(error.message, error.status);
     }
   }
 
   @Delete(':id')
-  async deleteOne(@Param('id') id : string){
+  async deleteOne(@Param('id') id: string) {
     try {
-      return await this.contactService.deleteById(id)
+      return await this.contactService.deleteById(id);
     } catch (error) {
       throw new HttpException(error.message , error.status)
     }

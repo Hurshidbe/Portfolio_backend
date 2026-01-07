@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBotDto } from './dto/create-bot.dto';
-import { UpdateBotDto } from './dto/update-bot.dto';
 
 @Injectable()
 export class BotService {
-  create(createBotDto: CreateBotDto) {
+  create() {
     return 'This action adds a new bot';
   }
 
@@ -16,7 +14,7 @@ export class BotService {
     return `This action returns a #${id} bot`;
   }
 
-  update(id: number, updateBotDto: UpdateBotDto) {
+  update(id: number) {
     return `This action updates a #${id} bot`;
   }
 

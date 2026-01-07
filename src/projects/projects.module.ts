@@ -6,11 +6,9 @@ import { Project, ProjectSchema } from './entities/project.entity';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 
 @Module({
-  imports : [
-    MongooseModule.forFeature([
-      {name : Project.name, schema : ProjectSchema}
-    ]),
-    CloudinaryModule
+  imports: [
+    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
+    CloudinaryModule,
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService],
