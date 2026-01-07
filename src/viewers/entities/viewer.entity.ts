@@ -1,12 +1,12 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Schema({timestamps : true})
+@Schema({ timestamps: true })
 export class Viewer {
-    @Prop()
-    ip_address : string
+  @Prop()
+  ip_address: string;
 
-    @Prop()
-    device_info : string
+  @Prop()
+  device_info: string;
 }
 
-export const viewerSchema = SchemaFactory.createForClass(Viewer)
+export const viewerSchema = SchemaFactory.createForClass(Viewer);

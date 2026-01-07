@@ -97,7 +97,7 @@ export class MainpageController {
     @Body() updateMainpageDto: CreateProfileDto,
   ) {
     try {
-      await this.mainpageService.normalizeArrayFields(updateMainpageDto, [
+      this.mainpageService.normalizeArrayFields(updateMainpageDto, [
         'skills',
         'tools',
       ]);

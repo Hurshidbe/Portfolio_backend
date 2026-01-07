@@ -27,7 +27,7 @@
     "tags": [],
     "title": "optimize code",
     "description": "",
-    "status": "TODO",
+    "status": "DONE",
     "date": {
       "date": {
         "year": 2026,
@@ -39,6 +39,19 @@
         "minute": 43,
         "second": 22,
         "nano": 313843100
+      }
+    },
+    "finishDate": {
+      "date": {
+        "year": 2026,
+        "month": 1,
+        "day": 7
+      },
+      "time": {
+        "hour": 14,
+        "minute": 59,
+        "second": 36,
+        "nano": 443793800
       }
     },
     "isImported": false

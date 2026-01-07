@@ -1,17 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { Http2ServerRequest } from 'http2';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  Param,
+  Patch,
+  Post,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Controller('blog')
 export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(
+    private readonly blogService: BlogService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
-  async createPost(@Body() dto: CreateBlogDto) {
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'photos', maxCount: 2 }], {
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
+  async createPost(
+    @UploadedFiles() files: { photos?: Express.Multer.File[] },
+    @Body() dto: CreateBlogDto,
+  ) {
     try {
+      const photosResults = files.photos?.length
+        ? await Promise.all(
+            files.photos.map((file) =>
+              this.cloudinaryService.uploadImage(file),
+            ),
+          )
+        : [];
+      dto.photos = photosResults.map((r) => r.secure_url);
       return await this.blogService.create(dto);
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
@@ -23,7 +53,7 @@ export class BlogController {
     try {
       return await this.blogService.get();
     } catch (error) {
-      throw new HttpException(error.message , error.status || 500)
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
@@ -37,11 +67,33 @@ export class BlogController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdateBlogDto) {
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }], {
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
+  async update(
+    @UploadedFiles() files : { photos?: Express.Multer.File[]},
+    @Param('id') id: string, @Body() dto: UpdateBlogDto
+  ) {
     try {
+      const photosResult = files.photos?.length
+      ? await Promise.all(
+        files.photos.map((file)=> this.cloudinaryService.uploadImage(file))
+      ):[]
+      dto.photos = photosResult.map((r)=>r.secure_url)
       return await this.blogService.update(id, dto);
     } catch (error) {
-      throw new HttpException(error.message , error.status)
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  @Delete(':id')
+  async deleteOne(@Param('id') id: string) {
+    try {
+      return await this.blogService.remove(id);
+    } catch (error) {
+      throw new HttpException(error.messages, error.status || 500);
     }
   }
 }

@@ -3,7 +3,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog } from './entities/blog.entity';
 import { Model } from 'mongoose';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class BlogService {
@@ -27,6 +27,8 @@ export class BlogService {
   }
 
   async remove(id: string) {
-    return await this.blogRepo.deleteOne({ id });
+    const deleting = await this.blogRepo.findById(id);
+    if (!deleting) throw new NotFoundException('data not found by this id')
+    return this.blogRepo.deleteOne({_id : id});
   }
 }

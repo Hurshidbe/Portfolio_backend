@@ -41,13 +41,15 @@ export class ProjectsController {
         ? await Promise.all(
             files.photos.map((file) =>
               this.cloudinaryService.uploadImage(file),
-            ),
+            )
           )
         : [];
       createProjectDto.photos = photosResults.map((r) => r.secure_url);
 
       return await this.projectsService.create(createProjectDto || 500);
-    } catch (error) {}
+    } catch (error) {
+      throw new HttpException(error.message, error.status || 500)
+    }
   }
 
   @Get()
