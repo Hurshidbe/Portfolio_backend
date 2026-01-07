@@ -3,12 +3,12 @@ import { ProjectsService } from './projects.service';
 import { ProjectsController } from './projects.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './entities/project.entity';
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 
 @Module({
-  imports : [
-    MongooseModule.forFeature([
-      {name : Project.name, schema : ProjectSchema}
-    ])
+  imports: [
+    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
+    CloudinaryModule,
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService],

@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString, IsUrl } from "class-validator";
+import { IsArray, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateProfileDto {
   @IsString()
@@ -33,7 +33,6 @@ export class CreateProfileDto {
   @IsOptional()
   @IsUrl()
   cv?: string;
-
 
   @IsArray()
   skills?: string[];

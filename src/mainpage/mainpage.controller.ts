@@ -9,6 +9,7 @@ import {
   Res,
   Param,
   Patch,
+  Req,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MainpageService } from './mainpage.service';
@@ -16,13 +17,15 @@ import { CreateProfileDto } from './dto/create-mainpage.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Response } from 'express';
+import type { Request } from 'express';
+import { ViewersService } from 'src/viewers/viewers.service';
 
 @Controller('mainpage')
 export class MainpageController {
   constructor(
     private readonly mainpageService: MainpageService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly viewerService: ViewersService,
   ) {}
 
   @Post()
@@ -36,22 +39,31 @@ export class MainpageController {
     ),
   )
   async create(
-    @UploadedFiles() files: { photos?: Express.Multer.File[]; cv?: Express.Multer.File[] },
+    @UploadedFiles()
+    files: { photos?: Express.Multer.File[]; cv?: Express.Multer.File[] },
     @Body() createMainpageDto: CreateProfileDto,
   ) {
     try {
-      await this.mainpageService.normalizeArrayFields(createMainpageDto, ['skills', 'tools']);
+      await this.mainpageService.normalizeArrayFields(createMainpageDto, [
+        'skills',
+        'tools',
+      ]);
 
       const photosResults = files.photos?.length
-        ? await Promise.all(files.photos.map(file => this.cloudinaryService.uploadImage(file)))
+        ? await Promise.all(
+            files.photos.map((file) =>
+              this.cloudinaryService.uploadImage(file),
+            ),
+          )
         : [];
-      createMainpageDto.photos = photosResults.map(r => r.secure_url);
+      createMainpageDto.photos = photosResults.map((r) => r.secure_url);
 
       if (files.cv && files.cv.length) {
         const cvFile = files.cv[0];
         const cvFolder = path.join(__dirname, '../../uploads/cv');
 
-        if (!fs.existsSync(cvFolder)) fs.mkdirSync(cvFolder, { recursive: true });
+        if (!fs.existsSync(cvFolder))
+          fs.mkdirSync(cvFolder, { recursive: true });
 
         const oldFiles = fs.readdirSync(cvFolder);
         for (const f of oldFiles) fs.unlinkSync(path.join(cvFolder, f));
@@ -65,54 +77,62 @@ export class MainpageController {
 
       return await this.mainpageService.create(createMainpageDto);
     } catch (error: any) {
-      throw new HttpException(error.message || 'Server error', error.status || 500);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
   @Patch(':id')
   @UseInterceptors(
-  FileFieldsInterceptor(
-    [
-      { name: 'photos', maxCount: 1 },
-      { name: 'cv', maxCount: 1 },
-    ],
-    { limits: { fileSize: 5 * 1024 * 1024 } },
-  ),
-)
-async update(
-  @Param('id') id: string,
-  @UploadedFiles() files: { photos?: Express.Multer.File[]; cv?: Express.Multer.File[] },
-  @Body() updateMainpageDto: CreateProfileDto,
-) {
-  try {
-    await this.mainpageService.normalizeArrayFields(updateMainpageDto, ['skills', 'tools']);
-    const photosResults = files.photos?.length
-      ? await Promise.all(files.photos.map(file => this.cloudinaryService.uploadImage(file)))
-      : [];
-    if (photosResults.length) {
-      updateMainpageDto.photos = photosResults.map(r => r.secure_url);
+    FileFieldsInterceptor(
+      [
+        { name: 'photos', maxCount: 1 },
+        { name: 'cv', maxCount: 1 },
+      ],
+      { limits: { fileSize: 5 * 1024 * 1024 } },
+    ),
+  )
+  async update(
+    @Param('id') id: string,
+    @UploadedFiles()
+    files: { photos?: Express.Multer.File[]; cv?: Express.Multer.File[] },
+    @Body() updateMainpageDto: CreateProfileDto,
+  ) {
+    try {
+      this.mainpageService.normalizeArrayFields(updateMainpageDto, [
+        'skills',
+        'tools',
+      ]);
+      const photosResults = files.photos?.length
+        ? await Promise.all(
+            files.photos.map((file) =>
+              this.cloudinaryService.uploadImage(file),
+            ),
+          )
+        : [];
+      if (photosResults.length) {
+        updateMainpageDto.photos = photosResults.map((r) => r.secure_url);
+      }
+      if (files.cv && files.cv.length) {
+        const cvFile = files.cv[0];
+        const cvFolder = path.join(__dirname, '../../uploads/cv');
+
+        if (!fs.existsSync(cvFolder))
+          fs.mkdirSync(cvFolder, { recursive: true });
+
+        const oldFiles = fs.readdirSync(cvFolder);
+        for (const f of oldFiles) fs.unlinkSync(path.join(cvFolder, f));
+
+        const filename = `hurshidbe_${cvFile.originalname}`;
+        const filepath = path.join(cvFolder, filename);
+        fs.writeFileSync(filepath, cvFile.buffer);
+
+        updateMainpageDto.cv = `/uploads/cv/${filename}`;
+      }
+
+      return await this.mainpageService.updateById(id, updateMainpageDto);
+    } catch (error: any) {
+      throw new HttpException(error.message, error.status || 500);
     }
-    if (files.cv && files.cv.length) {
-      const cvFile = files.cv[0];
-      const cvFolder = path.join(__dirname, '../../uploads/cv');
-
-      if (!fs.existsSync(cvFolder)) fs.mkdirSync(cvFolder, { recursive: true });
-
-      const oldFiles = fs.readdirSync(cvFolder);
-      for (const f of oldFiles) fs.unlinkSync(path.join(cvFolder, f));
-
-      const filename = `hurshidbe_${cvFile.originalname}`;
-      const filepath = path.join(cvFolder, filename);
-      fs.writeFileSync(filepath, cvFile.buffer);
-
-      updateMainpageDto.cv = `/uploads/cv/${filename}`;
-    }
-
-    return await this.mainpageService.updateById(id, updateMainpageDto);
-  } catch (error: any) {
-    throw new HttpException(error.message || 'Server error', error.status || 500);
   }
-}
-
 
   @Get('cv')
   async downloadCv(@Res() res: any) {
@@ -122,19 +142,23 @@ async update(
 
       if (!files.length) throw new HttpException('CV not found', 404);
 
-      const filepath = path.join(cvFolder, files[0]); 
+      const filepath = path.join(cvFolder, files[0]);
       res.download(filepath, files[0]);
     } catch (error: any) {
-      throw new HttpException(error.message , error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Get()
-  async getMainPage(){
+  async getMainPage(@Req() req: Request) {
     try {
-      return await this.mainpageService.find()
+      await this.viewerService.create(
+        req.ip || '',
+        req.headers['user-agent'] || '',
+      );
+      return await this.mainpageService.find();
     } catch (error) {
-      throw new HttpException(error.message , error.status)
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }

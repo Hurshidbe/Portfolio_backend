@@ -5,10 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Experience } from './entities/experience.entity';
 
 @Module({
-  imports : [
-    MongooseModule.forFeature([
-      {name : Experience.name, schema : Experience}
-    ])
+  imports: [
+    MongooseModule.forFeature([{ name: Experience.name, schema: Experience }]),
   ],
   controllers: [ExperienceController],
   providers: [ExperienceService],

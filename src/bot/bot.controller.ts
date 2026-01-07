@@ -1,15 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BotService } from './bot.service';
-import { CreateBotDto } from './dto/create-bot.dto';
-import { UpdateBotDto } from './dto/update-bot.dto';
+import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
 @Controller('bot')
 export class BotController {
   constructor(private readonly botService: BotService) {}
 
   @Post()
-  create(@Body() createBotDto: CreateBotDto) {
-    return this.botService.create(createBotDto);
+  create() {
+    return this.botService.create();
   }
 
   @Get()
@@ -23,8 +21,8 @@ export class BotController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBotDto: UpdateBotDto) {
-    return this.botService.update(+id, updateBotDto);
+  update(@Param('id') id: string) {
+    return this.botService.update(+id);
   }
 
   @Delete(':id')
