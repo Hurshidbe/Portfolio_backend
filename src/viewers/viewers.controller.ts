@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpException,
-} from '@nestjs/common';
+import { Controller, Get, Body, HttpException } from '@nestjs/common';
 import { ViewersService } from './viewers.service';
 
 @Controller('viewers')
@@ -16,7 +7,11 @@ export class ViewersController {
 
   @Get()
   findAll() {
-    return this.viewersService.findAll();
+    try {
+      return this.viewersService.findAll();
+    } catch (error) {
+      throw new HttpException(error.message, error.status || 500);
+    }
   }
 
   @Get('view-count')
@@ -24,7 +19,7 @@ export class ViewersController {
     try {
       return await this.viewersService.viewCount();
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status || 500);
     }
   }
 }
