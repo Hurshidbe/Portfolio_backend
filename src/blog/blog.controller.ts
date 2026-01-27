@@ -73,16 +73,19 @@ export class BlogController {
     }),
   )
   async update(
-    @UploadedFiles() files : { photos?: Express.Multer.File[]},
-    @Param('id') id: string, @Body() dto: UpdateBlogDto
+    @UploadedFiles() files: { photos?: Express.Multer.File[] },
+    @Param('id') id: string,
+    @Body() dto: UpdateBlogDto,
   ) {
     try {
-      const photosResult = files.photos?.length
-      ? await Promise.all(
-        files.photos.map((file)=> this.cloudinaryService.uploadImage(file))
-      ):[]
-      dto.photos = photosResult.map((r)=>r.secure_url)
-      return await this.blogService.update(id, dto);
+      if (files?.photos?.length) {
+        const photosResult = await Promise.all(
+          files.photos.map((file) => this.cloudinaryService.uploadImage(file)),
+        );
+        dto.photos = photosResult.map((r) => r.secure_url);
+      }
+      const result = await this.blogService.update(id, dto);
+      return result;
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
