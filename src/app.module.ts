@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MainpageModule } from './mainpage/mainpage.module';
 import { BlogModule } from './blog/blog.module';
 import { ViewersModule } from './viewers/viewers.module';
@@ -26,17 +24,17 @@ dotenv.config();
       },
     }),
     MongooseModule.forRoot(process.env.DB || ''),
+    AuthModule,
     MainpageModule,
-    BlogModule,
-    ViewersModule,
+    ExperienceModule,
     ProjectsModule,
+    BlogModule,
     ContactModule,
+    ViewersModule,
     BotModule,
     CloudinaryModule,
-    ExperienceModule,
-    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
