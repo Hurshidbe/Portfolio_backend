@@ -10,6 +10,7 @@ import {
   Param,
   Patch,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MainpageService } from './mainpage.service';
@@ -19,6 +20,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type { Request } from 'express';
 import { ViewersService } from 'src/viewers/viewers.service';
+import { AuthGuard } from 'src/guards/AuthGuard';
 
 @Controller('mainpage')
 export class MainpageController {
@@ -28,6 +30,7 @@ export class MainpageController {
     private readonly viewerService: ViewersService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -77,9 +80,11 @@ export class MainpageController {
 
       return await this.mainpageService.create(createMainpageDto);
     } catch (error: any) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
+
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -130,7 +135,7 @@ export class MainpageController {
 
       return await this.mainpageService.updateById(id, updateMainpageDto);
     } catch (error: any) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
@@ -145,7 +150,7 @@ export class MainpageController {
       const filepath = path.join(cvFolder, files[0]);
       res.download(filepath, files[0]);
     } catch (error: any) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
@@ -158,7 +163,7 @@ export class MainpageController {
       );
       return await this.mainpageService.find();
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 }

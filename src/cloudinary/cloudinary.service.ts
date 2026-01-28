@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { v2 as cloudinary } from "cloudinary";
-import { Readable } from "stream";
-import * as dotenv from "dotenv";
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 @Injectable()

@@ -19,11 +19,11 @@ dotenv.config();
 @Module({
   imports: [
     JwtModule.register({
-      global : true,
-      secret : process.env.JWT,
-      signOptions : {
-        expiresIn : '1h'
-      }
+      global: true,
+      secret: process.env.JWT,
+      signOptions: {
+        expiresIn: '1h',
+      },
     }),
     MongooseModule.forRoot(process.env.DB || ''),
     MainpageModule,
@@ -37,6 +37,6 @@ dotenv.config();
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthGuard],
+  providers: [AppService],
 })
 export class AppModule {}
