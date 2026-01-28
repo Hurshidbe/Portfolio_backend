@@ -11,10 +11,12 @@ import {
   Patch,
   Post,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { AuthGuard } from 'src/guards/AuthGuard';
 
 @Controller('blog')
 export class BlogController {
@@ -23,6 +25,7 @@ export class BlogController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'photos', maxCount: 2 }], {
@@ -44,7 +47,7 @@ export class BlogController {
       dto.photos = photosResults.map((r) => r.secure_url);
       return await this.blogService.create(dto);
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
@@ -53,7 +56,7 @@ export class BlogController {
     try {
       return await this.blogService.get();
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
@@ -62,10 +65,11 @@ export class BlogController {
     try {
       return await this.blogService.getOne(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }], {
@@ -87,16 +91,17 @@ export class BlogController {
       const result = await this.blogService.update(id, dto);
       return result;
     } catch (error) {
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteOne(@Param('id') id: string) {
     try {
       return await this.blogService.remove(id);
     } catch (error) {
-      throw new HttpException(error.messages, error.status || 500);
+      throw new HttpException(error.messages, error.status ?? 500);
     }
   }
 }

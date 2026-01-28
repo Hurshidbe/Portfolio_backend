@@ -9,12 +9,14 @@ import {
   UseInterceptors,
   UploadedFiles,
   HttpException,
+  UseGuards,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { AuthGuard } from 'src/guards/AuthGuard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -23,6 +25,7 @@ export class ProjectsController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }], {
@@ -70,6 +73,7 @@ export class ProjectsController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }]))
   async update(
@@ -98,6 +102,7 @@ export class ProjectsController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     try {
