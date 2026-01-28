@@ -10,11 +10,21 @@ import { BotModule } from './bot/bot.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ExperienceModule } from './experience/experience.module';
+import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthGuard } from './guards/AuthGuard';
 dotenv.config();
 
 @Module({
   imports: [
+    JwtModule.register({
+      global : true,
+      secret : process.env.JWT,
+      signOptions : {
+        expiresIn : '1h'
+      }
+    }),
     MongooseModule.forRoot(process.env.DB || ''),
     MainpageModule,
     BlogModule,
@@ -24,8 +34,9 @@ dotenv.config();
     BotModule,
     CloudinaryModule,
     ExperienceModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthGuard],
 })
 export class AppModule {}
