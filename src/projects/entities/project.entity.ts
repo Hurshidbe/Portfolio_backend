@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { CreateBlogDto } from 'src/blog/dto/create-blog.dto';
 
 @Schema({ timestamps: true })
 export class Project {
@@ -19,7 +18,7 @@ export class Project {
   github_url: string;
 
   @Prop()
-  tecnologies: string[];
+  technologies: string[];
 
   @Prop({ required: false, default: Date.now() })
   deployed_date: Date;

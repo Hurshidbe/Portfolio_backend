@@ -5,16 +5,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
-  app.useGlobalPipes(new ValidationPipe(
-    {forbidNonWhitelisted:true, whitelist:true}
-  ))
+
+  app.useGlobalPipes(
+    new ValidationPipe({ forbidNonWhitelisted: true, whitelist: true }),
+  );
+  app.enableCors({ origin: '*' });
   const config = new DocumentBuilder()
-  .setTitle('Portfolio-Swagger')
-  .setVersion('1.0')
-  .build()
-  const documentFactory=()=> SwaggerModule.createDocument(app,config)
-  SwaggerModule.setup('api', app, documentFactory)
+    .setTitle('Portfolio-Swagger')
+    .setVersion('1.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
   await app.listen(process.env.PORT ?? 3000);
   console.warn(`server is runnning port on ${process.env.PORT}`);
   console.log('(❁´◡`❁)');

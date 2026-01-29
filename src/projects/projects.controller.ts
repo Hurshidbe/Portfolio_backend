@@ -65,9 +65,9 @@ export class ProjectsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     try {
-      return this.projectsService.findOne(id);
+      return await this.projectsService.findOne(id);
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
     }
