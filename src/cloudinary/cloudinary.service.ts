@@ -14,7 +14,6 @@ export class CloudinaryService {
     });
   }
 
-  // Bir nechta rasm yuklash
   async upload(
     files: Express.Multer.File[] | Express.Multer.File,
   ): Promise<{ secure_url: string }[]> {
@@ -24,7 +23,6 @@ export class CloudinaryService {
     return await Promise.all(filesArr.map((file) => this.uploadImage(file)));
   }
 
-  // Bitta rasm yuklash
   async uploadImage(
     file: Express.Multer.File,
   ): Promise<{ secure_url: string }> {
@@ -45,11 +43,9 @@ export class CloudinaryService {
           if (error) return reject(error);
           if (!result || !result.secure_url)
             return reject(new Error('Upload failed: no result returned'));
-
           resolve({ secure_url: result.secure_url });
         },
       );
-
       Readable.from(file.buffer).pipe(uploadStream);
     });
   }

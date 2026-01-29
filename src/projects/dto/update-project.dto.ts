@@ -36,13 +36,13 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @ApiProperty()
   @IsNotEmpty()
   @IsUrl()
-  guthub_url: string;
+  github_url: string;
 
   @ApiProperty()
   @IsOptional()
   @IsArray()
   @IsString()
-  tecnologies?: string[];
+  tecnologies?: string;
 
   @ApiProperty()
   @IsOptional()
