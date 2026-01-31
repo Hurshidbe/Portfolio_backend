@@ -40,7 +40,6 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
 
   @ApiProperty()
   @IsOptional()
-  @IsArray()
   @IsString()
   tecnologies?: string;
 

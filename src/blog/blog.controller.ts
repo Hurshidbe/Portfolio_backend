@@ -17,7 +17,9 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AuthGuard } from 'src/guards/AuthGuard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('blog')
 @Controller('blog')
 export class BlogController {
   constructor(
@@ -25,6 +27,7 @@ export class BlogController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+@ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
@@ -69,6 +72,7 @@ export class BlogController {
     }
   }
 
+@ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Patch(':id')
   @UseInterceptors(
@@ -95,6 +99,7 @@ export class BlogController {
     }
   }
 
+@ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Delete(':id')
   async deleteOne(@Param('id') id: string) {

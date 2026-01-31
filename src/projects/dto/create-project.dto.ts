@@ -46,6 +46,5 @@ export class CreateProjectDto {
 
   @ApiProperty({ type: 'string', example: 'loyiha tugallangan sana' })
   @IsNotEmpty()
-  @IsDateString()
   deployed_date: string;
 }
