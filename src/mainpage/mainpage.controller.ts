@@ -14,13 +14,15 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MainpageService } from './mainpage.service';
-import { CreateProfileDto } from './dto/create-mainpage.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import type { Request } from 'express';
 import { ViewersService } from 'src/viewers/viewers.service';
 import { AuthGuard } from 'src/guards/AuthGuard';
+import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { CreateProfileDto } from './dto/create-mainpage.dto';
+import { UpdateProfileDto } from './dto/update-mainpage.dto';
 
 @Controller('mainpage')
 export class MainpageController {
@@ -32,6 +34,10 @@ export class MainpageController {
 
   @UseGuards(AuthGuard)
   @Post()
+  @ApiBearerAuth('JWT-auth')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateProfileDto })
+
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -47,11 +53,6 @@ export class MainpageController {
     @Body() createMainpageDto: CreateProfileDto,
   ) {
     try {
-      await this.mainpageService.normalizeArrayFields(createMainpageDto, [
-        'skills',
-        'tools',
-      ]);
-
       const photosResults = files.photos?.length
         ? await Promise.all(
             files.photos.map((file) =>
@@ -85,6 +86,9 @@ export class MainpageController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({type : UpdateProfileDto})
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -99,13 +103,9 @@ export class MainpageController {
     @Param('id') id: string,
     @UploadedFiles()
     files: { photos?: Express.Multer.File[]; cv?: Express.Multer.File[] },
-    @Body() updateMainpageDto: CreateProfileDto,
+    @Body() updateMainpageDto : UpdateProfileDto,
   ) {
     try {
-      this.mainpageService.normalizeArrayFields(updateMainpageDto, [
-        'skills',
-        'tools',
-      ]);
       const photosResults = files.photos?.length
         ? await Promise.all(
             files.photos.map((file) =>

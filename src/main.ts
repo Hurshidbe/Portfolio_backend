@@ -6,8 +6,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // app.useGlobalPipes(
-  //   new ValidationPipe({ forbidNonWhitelisted: true, whitelist: true }),);
+  app.useGlobalPipes(
+    new ValidationPipe({ 
+      transform : true,
+      forbidNonWhitelisted: true, 
+      whitelist: true }),);
   app.enableCors({ origin: '*' });
   const config = new DocumentBuilder()
     .setTitle('Portfolio-Swagger')
