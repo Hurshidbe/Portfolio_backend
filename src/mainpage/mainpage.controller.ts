@@ -20,7 +20,7 @@ import * as path from 'path';
 import type { Request } from 'express';
 import { ViewersService } from 'src/viewers/viewers.service';
 import { AuthGuard } from 'src/guards/AuthGuard';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { CreateProfileDto } from './dto/create-mainpage.dto';
 import { UpdateProfileDto } from './dto/update-mainpage.dto';
 
@@ -37,6 +37,7 @@ export class MainpageController {
   @ApiBearerAuth('JWT-auth')
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreateProfileDto })
+  @ApiOperation({summary : 'main page uchun data yaratish. (faqat bitta yaratiladi)'})
 
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -86,6 +87,7 @@ export class MainpageController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiOperation({summary : 'main pagedagi datani taxrirlash'})
   @ApiBearerAuth('JWT-auth')
   @ApiConsumes('multipart/form-data')
   @ApiBody({type : UpdateProfileDto})
@@ -140,6 +142,7 @@ export class MainpageController {
   }
 
   @Get('cv')
+  @ApiOperation({summary : 'cv faylni yuklab olish'})
   async downloadCv(@Res() res: any) {
     try {
       const cvFolder = path.join(__dirname, '../../uploads/cv');
@@ -155,6 +158,7 @@ export class MainpageController {
   }
 
   @Get()
+  @ApiOperation({summary : 'main page ma`lumotlarini olish'})
   async getMainPage(@Req() req: Request) {
     try {
       await this.viewerService.create(

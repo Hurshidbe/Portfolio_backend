@@ -33,7 +33,7 @@ export class CreateExperienceDto {
   @ApiProperty({
     type: 'string',
     description: 'tashkilotda ish boshlagan sanasi',
-    example: '12-12-1988',
+    example: '1988-12-12',
   })
   @IsDateString()
   from: Date;
@@ -41,7 +41,7 @@ export class CreateExperienceDto {
   @ApiProperty({
     type: 'string',
     description: 'tashkilotdan haydalgan sanasi, kiritilmasa ham bo`laveradi',
-    example: '12-12-2005',
+    example: '2005-12-12',
   })
   @IsDateString()
   to?: Date;
