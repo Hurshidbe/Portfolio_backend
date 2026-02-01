@@ -13,11 +13,14 @@ import { ExperienceService } from './experience.service';
 import { CreateExperienceDto } from './dto/create-experience.dto';
 import { UpdateExperienceDto } from './dto/update-experience.dto';
 import { AuthGuard } from 'src/guards/AuthGuard';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('experience')
 export class ExperienceController {
   constructor(private readonly experienceService: ExperienceService) {}
 
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({summary : 'yangi jajriba qo`shish'})
   @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createExperienceDto: CreateExperienceDto) {
@@ -29,6 +32,7 @@ export class ExperienceController {
   }
 
   @Get()
+  @ApiOperation({summary : 'barcha tajribalarni ko`rish'})
   async findAll() {
     try {
       return await this.experienceService.findAll();
@@ -38,6 +42,7 @@ export class ExperienceController {
   }
 
   @Get(':id')
+  @ApiOperation({summary : 'tajriba ma`lumotini Id bo"yicha olish'})
   async findOne(@Param('id') id: string) {
     try {
       return await this.experienceService.findOne(id);
@@ -47,6 +52,8 @@ export class ExperienceController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({summary : 'tajriba malumotini Id bo`yicha taxririlash'})
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -60,6 +67,8 @@ export class ExperienceController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({summary : 'tajribani Id si orqali delete qilish'})
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
