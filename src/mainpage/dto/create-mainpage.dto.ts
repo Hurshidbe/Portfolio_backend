@@ -1,70 +1,89 @@
-import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsOptional, IsString, IsUrl } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateProfileDto {
-  @ApiProperty({
-    type: 'string',
-    description: 'to`liq ismi',
-    example: 'eshmatov toshman',
-  })
+  @ApiProperty({ example: 'Baqay tog`a' })
   @IsString()
   full_name: string;
 
-  @ApiProperty({ description: 'profili uchun rasm (majburiy emas)' })
-  @IsString()
-  @IsOptional()
-  photos?: string[];
-
-  @ApiProperty({ description: 'kasbi' })
-  @Prop()
+  @ApiProperty({ required: true, description: 'kasbi', example: 'loychi' })
   @IsString()
   profession: string;
 
-  @ApiProperty({ description: 'o`zi haqida biroz ma`lumot' })
+  @ApiProperty({
+    description: 'O`zi haqida ma`lumot',
+    required: false,
+    example: `to'g'risini aytadigan bo'lsam men dunyoni 8-mo'jizasimanda😁`,
+  })
   @IsString()
   @IsOptional()
   profession_add?: string;
 
-  @ApiProperty({ type: 'string', description: 'mazili' })
+  @ApiProperty({ description: 'manzil', required: false, example: 'xuytepa mahallasi' })
   @IsString()
+  @IsOptional()
   address?: string;
 
-  @ApiProperty({ type: 'string', description: 'github url, url bolishi shart' })
+  @ApiProperty({ description: 'Github URL', required: false, example: 'https://github.com/baqay' })
   @IsUrl()
+  @IsOptional()
   github?: string;
 
-  @ApiProperty({
-    type: 'string',
-    description: 'telegram url, url bolishi shart',
-  })
+  @ApiProperty({ description: 'Telegram URL', required: false, example: 'https://t.me/baqay' })
   @IsUrl()
   @IsOptional()
   telegram?: string;
 
-  @ApiProperty({
-    type: 'string',
-    description: 'linkedin url, url bolishi shart',
-  })
+  @ApiProperty({ description: 'LinkedIn URL', required: false, example: 'https://google.com' })
   @IsUrl()
   @IsOptional()
   linkedin?: string;
 
-  @ApiProperty({
-    description: `cv/resume  , formatlar : pdf/word/doc/jpg/png...`,
-  })
-  @IsString()
+  @ApiProperty({ description: 'Skills', type: [String], required: false })
   @IsOptional()
-  @IsUrl()
-  cv?: string;
-
-  @ApiProperty({ description: 'skillar' })
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value.split(',').map((i) => i.trim()).filter((i) => i !== '');
+    }
+    if (Array.isArray(value)) {
+      return value.join(',').split(',').map((i) => i.trim()).filter((i) => i !== '');
+    }
+    return value;
+  })
   @IsArray()
+  @IsString({ each: true })
   skills?: string[];
 
-  @ApiProperty({ description: 'toollar' })
+  @ApiProperty({ description: 'Tools', type: [String], required: false })
+  @IsOptional()
+  @Transform(({ value}) => {
+    if (typeof value==='string') {
+      return value.split(',').map((i)=>i.trim()).filter((i)=>i !=='');
+    }
+    if (Array.isArray(value)) {
+      return value.join(',').split(',').map((i)=> i.trim()).filter((i)=>i !== '');
+    }
+    return value;
+  })
   @IsArray()
+  @IsString({ each: true })
   tools?: string[];
-}
 
-export class UpdateProfileDto extends CreateProfileDto {}
+  @ApiProperty({
+    format: 'binary',
+    description: 'Profil rasmi(1 dona rasm bo`lishi shart)',
+    required: false,
+  })
+  @IsOptional()
+  photos?: any;
+
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'CV fayl',
+    required: false,
+  })
+  @IsOptional()
+  cv?: any;
+}

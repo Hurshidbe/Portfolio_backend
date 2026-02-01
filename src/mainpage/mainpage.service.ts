@@ -3,10 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateProfileDto, UpdateProfileDto } from './dto/create-mainpage.dto';
+import { CreateProfileDto } from './dto/create-mainpage.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Main } from './entities/mainpage.entity';
 import { Model } from 'mongoose';
+import { UpdateProfileDto } from './dto/update-mainpage.dto';
 
 @Injectable()
 export class MainpageService {
