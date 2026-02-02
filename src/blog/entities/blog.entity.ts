@@ -13,9 +13,6 @@ export class Blog {
 
   @Prop({ required: false, default: 0 })
   views?: number;
-
-  @Prop({ required: false, default: 0 })
-  likes?: number;
 }
 
 export const BlogSchema = SchemaFactory.createForClass(Blog);

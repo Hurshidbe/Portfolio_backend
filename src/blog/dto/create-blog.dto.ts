@@ -5,7 +5,8 @@ export class CreateBlogDto {
   @ApiProperty({
     type: 'array',
     items: { type: 'string', format: 'binary' },
-    description: 'blog post uchun rasmlar(0-2 tagacha rasm)'
+    description : 'projectdan skrinshotlar(0-2 tagacha rasm)',
+    required : false
   })
   @IsOptional()
   photos?: any[];
