@@ -2,10 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateBlogDto {
-  @ApiProperty({ description: 'blog post uchun rasm' })
+  @ApiProperty({
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    description: 'blog post uchun rasmlar(0-2 tagacha rasm)'
+  })
   @IsOptional()
-  @IsString()
-  photos?: string[];
+  photos?: any[];
 
   @ApiProperty({ type: String, description: 'sarlavha' })
   @IsString()

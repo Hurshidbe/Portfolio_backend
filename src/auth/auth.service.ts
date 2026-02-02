@@ -12,6 +12,6 @@ export class AuthService {
       process.env.PASSWORD || Logger.log('password is undefined');
     if (dto.login !== admin_login || dto.password !== admin_password)
       throw new UnauthorizedException('incorrect login or password');
-    return await this.jwtService.signAsync({ user: admin_login });
+    return await this.jwtService.signAsync({ user: admin_login }, {expiresIn: '24h'})
   }
 }
