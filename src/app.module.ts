@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import * as dotenv from 'dotenv';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './guards/AuthGuard';
+import { AchievementsModule } from './achievements/achievements.module';
 dotenv.config();
 
 @Module({
@@ -33,6 +34,7 @@ dotenv.config();
     ViewersModule,
     BotModule,
     CloudinaryModule,
+    AchievementsModule,
   ],
   controllers: [],
   providers: [],
