@@ -12,13 +12,13 @@ export class UpdateBlogDto extends PartialType(CreateBlogDto) {
   @IsOptional()
   photos?: any[];
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String , required : false})
   @IsOptional()
   @IsString()
   @Length(2, 500)
   title?: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String, required : false })
   @IsOptional()
   @IsString()
   @Length(0, 1000)

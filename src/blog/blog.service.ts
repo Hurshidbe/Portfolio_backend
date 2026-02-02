@@ -22,6 +22,10 @@ export class BlogService {
     return await this.blogRepo.findByIdAndUpdate(id, dto, { new: true });
   }
 
+  async addView(id : string){
+    return await this.blogRepo.findByIdAndUpdate(id, {$inc:{views: +1}}, {new : true})
+  }
+
   async get() {
     return await this.blogRepo.find();
   }

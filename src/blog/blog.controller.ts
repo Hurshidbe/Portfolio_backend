@@ -17,7 +17,7 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AuthGuard } from 'src/guards/AuthGuard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('blog')
 @Controller('blog')
@@ -27,9 +27,13 @@ export class BlogController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-@ApiBearerAuth('JWT-auth')
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Post()
+  @ApiBearerAuth('JWT-auth')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateBlogDto})
+  @ApiOperation({summary : 'blog-post yaratish'})
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'photos', maxCount: 2 }], {
       limits: { fileSize: 5 * 1024 * 1024 },
@@ -55,6 +59,7 @@ export class BlogController {
   }
 
   @Get()
+  @ApiOperation({summary : 'hamma postlarni get qilish'})
   async All() {
     try {
       return await this.blogService.get();
@@ -64,17 +69,23 @@ export class BlogController {
   }
 
   @Get(':id')
+  @ApiOperation({summary : 'postni Idsi bilan ko`rish'})
   async One(@Param('id') id: string) {
     try {
+      await this.blogService.addView(id)
       return await this.blogService.getOne(id);
     } catch (error) {
       throw new HttpException(error.message, error.status ?? 500);
     }
   }
 
-@ApiBearerAuth('JWT-auth')
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Patch(':id')
+  @ApiBearerAuth('JWT-auth')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateBlogDto})
+  @ApiOperation({summary : 'blog-postni Id bilan taxrirlash'})
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }], {
       limits: { fileSize: 5 * 1024 * 1024 },
@@ -99,9 +110,10 @@ export class BlogController {
     }
   }
 
-@ApiBearerAuth('JWT-auth')
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   @Delete(':id')
+  @ApiOperation({summary : 'blog-postni delete qivorish'})
   async deleteOne(@Param('id') id: string) {
     try {
       return await this.blogService.remove(id);
