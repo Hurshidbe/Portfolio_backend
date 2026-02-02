@@ -17,6 +17,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { AuthGuard } from 'src/guards/AuthGuard';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 
 @Controller('projects')
 export class ProjectsController {
@@ -27,6 +28,10 @@ export class ProjectsController {
 
   @UseGuards(AuthGuard)
   @Post()
+  @ApiOperation({summary : 'project qo`shish'})
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('JWT-auth')
+  @ApiBody({ type: CreateProjectDto })
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }], {
       limits: { fileSize: 5 * 1024 * 1024 },
@@ -37,9 +42,6 @@ export class ProjectsController {
     @Body() createProjectDto: CreateProjectDto,
   ) {
     try {
-      await this.projectsService.normalizeArrayFields(createProjectDto, [
-        'tecnologies',
-      ]);
       const photosResults = files.photos?.length
         ? await Promise.all(
             files.photos.map((file) =>
@@ -48,14 +50,14 @@ export class ProjectsController {
           )
         : [];
       createProjectDto.photos = photosResults.map((r) => r.secure_url);
-
-      return await this.projectsService.create(createProjectDto || 500);
+      return await this.projectsService.create(createProjectDto);
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
     }
   }
 
   @Get()
+  @ApiOperation({summary: 'barcha projectlarni ko`rish'})
   findAll() {
     try {
       return this.projectsService.findAll();
@@ -65,6 +67,7 @@ export class ProjectsController {
   }
 
   @Get(':id')
+  @ApiOperation({summary : 'projectni Idsi bilan det qilish'})
   async findOne(@Param('id') id: string) {
     try {
       return await this.projectsService.findOne(id);
@@ -74,6 +77,10 @@ export class ProjectsController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('JWT-auth')
+  @ApiBody({ type: UpdateProjectDto })
+  @ApiOperation({summary : 'projectni malumotlarini id orqali taxrirlash'})
   @Patch(':id')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'photos', maxCount: 3 }]))
   async update(
@@ -82,9 +89,6 @@ export class ProjectsController {
     @Body() updateProjectDto: UpdateProjectDto,
   ) {
     try {
-      await this.projectsService.normalizeArrayFields(updateProjectDto, [
-        'tecnologies',
-      ]);
       const photosResults = files.photos?.length
         ? await Promise.all(
             files.photos.map((file) =>
@@ -104,6 +108,8 @@ export class ProjectsController {
 
   @UseGuards(AuthGuard)
   @Delete(':id')
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({summary : 'projectni id orqali o`chirish'})
   remove(@Param('id') id: string) {
     try {
       return this.projectsService.remove(id);

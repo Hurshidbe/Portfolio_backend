@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsArray,
   IsDateString,
@@ -10,10 +11,14 @@ import {
 } from 'class-validator';
 
 export class CreateProjectDto {
-  @ApiProperty({ description: 'pryektdan rasmlar', maximum: 3 })
+  @ApiProperty({
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    description : 'projectdan skrinshotlar(0-3 tagacha rasm)',
+    required : false
+  })
   @IsOptional()
-  @IsString({ each: true })
-  photos?: string[];
+  photos?: any[];
 
   @ApiProperty({ type: 'string', example: 'ToychaUZ' })
   @IsNotEmpty()
@@ -22,6 +27,7 @@ export class CreateProjectDto {
   project_name: string;
 
   @ApiProperty({
+    description : 'project haqida qisqacha ma`lumot',
     type: 'string',
     example: 'karochi dastur deliver - marketlar to`grisida',
   })
@@ -29,7 +35,7 @@ export class CreateProjectDto {
   @Length(1, 500)
   description?: string;
 
-  @ApiProperty({ type: 'string', example: 'https://google.com' })
+  @ApiProperty({ type: 'string', example: 'https://google.com', description : 'project linki' })
   @IsNotEmpty()
   @IsUrl()
   project_url: string;
@@ -39,12 +45,25 @@ export class CreateProjectDto {
   @IsUrl()
   github_url: string;
 
-  @ApiProperty({ example: 'ishlatilgan texnologiyalar' })
-  @IsNotEmpty()
-  @IsString()
-  tecnologies: string;
+  @ApiProperty({
+  type: 'array',
+  items: { type: 'string' },
+  description: 'project ishlatilgan texnologiyalar',
+  example: ['React', 'Node.js', 'MongoDB'],
+  required: false
+})
+@IsOptional()
+@Transform(({ value }) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.map(i => i.toString().trim()).filter(i => i !== '');
+  return value.toString().split(',').map(i => i.trim()).filter(i => i !== '');
+})
+@IsArray()
+@IsString({ each: true })
+technologies?: string[];
 
-  @ApiProperty({ type: 'string', example: 'loyiha tugallangan sana' })
+
+  @ApiProperty({ type: 'string', example: '2025-12-12' })
   @IsNotEmpty()
   deployed_date: string;
 }

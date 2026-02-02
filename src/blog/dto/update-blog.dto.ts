@@ -5,11 +5,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateBlogDto extends PartialType(CreateBlogDto) {
   @ApiProperty({
-    description: 'rasm yuborilmasa avval yuborilgan rasmlar saqlanadi',
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    description: 'rasm yuborilmasa avval yuborilgan rasmlar saqlanadi'
   })
   @IsOptional()
-  @IsString()
-  photos?: string[];
+  photos?: any[];
 
   @ApiProperty({ type: String })
   @IsOptional()

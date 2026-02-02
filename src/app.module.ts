@@ -20,8 +20,8 @@ dotenv.config();
       global: true,
       secret: process.env.JWT,
       signOptions: {
-        expiresIn: '1h',
-      },
+        expiresIn: '24h',
+      }
     }),
     MongooseModule.forRoot(process.env.DB || ''),
     AuthModule,
