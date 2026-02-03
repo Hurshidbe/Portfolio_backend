@@ -11,7 +11,7 @@ async function bootstrap() {
       transform : true,
       forbidNonWhitelisted: true, 
       whitelist: true }),);
-  app.enableCors({ origin: '*' });
+  app.enableCors({ origin: '*' }); // mvp dan oldin must change
   const config = new DocumentBuilder()
     .setTitle('Portfolio-Swagger')
     .setVersion('1.0')

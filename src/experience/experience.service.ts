@@ -21,7 +21,7 @@ export class ExperienceService {
   }
 
   async findAll() {
-    return await this.experienceRepo.find();
+    return await this.experienceRepo.find().sort({createdAt : -1});
   }
 
   async findOne(id: string) {
