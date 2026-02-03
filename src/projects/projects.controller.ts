@@ -42,6 +42,9 @@ export class ProjectsController {
     @Body() createProjectDto: CreateProjectDto,
   ) {
     try {
+      await this.projectsService.normalizeArrayFields(createProjectDto, [
+        'tecnologies',
+      ]);
       const photosResults = files.photos?.length
         ? await Promise.all(
             files.photos.map((file) =>
@@ -50,6 +53,7 @@ export class ProjectsController {
           )
         : [];
       createProjectDto.photos = photosResults.map((r) => r.secure_url);
+
       return await this.projectsService.create(createProjectDto);
     } catch (error) {
       throw new HttpException(error.message, error.status || 500);
@@ -89,6 +93,9 @@ export class ProjectsController {
     @Body() updateProjectDto: UpdateProjectDto,
   ) {
     try {
+      await this.projectsService.normalizeArrayFields(updateProjectDto, [
+        'tecnologies',
+      ]);
       const photosResults = files.photos?.length
         ? await Promise.all(
             files.photos.map((file) =>
