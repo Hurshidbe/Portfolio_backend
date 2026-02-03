@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Viewer, viewerSchema } from './entities/viewer.entity';
 import { Model } from 'mongoose';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ViewersService {
@@ -16,7 +15,7 @@ export class ViewersService {
   }
 
   async findAll() {
-    return await this.ViewersRepo.find();
+    return await this.ViewersRepo.find().sort({createdAt : -1});
   }
 
   async viewCount() {

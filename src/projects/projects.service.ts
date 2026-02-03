@@ -16,7 +16,7 @@ export class ProjectsService {
   }
 
   async findAll() {
-    return await this.projectsRepo.find();
+    return await this.projectsRepo.find().sort({createdAt : -1});
   }
 
   async findOne(id: string) {

@@ -11,7 +11,7 @@ async function bootstrap() {
       transform : true,
       forbidNonWhitelisted: true, 
       whitelist: true }),);
-  app.enableCors({ origin: '*' });
+  app.enableCors({ origin: '*' }); // mvp dan oldin must change
   const config = new DocumentBuilder()
     .setTitle('Portfolio-Swagger')
     .setVersion('1.0')
@@ -31,6 +31,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
   await app.listen(process.env.PORT ?? 3000);
   console.warn(`server is runnning port on ${process.env.PORT}`);
-  console.log('(❁´◡`❁)');
+  console.log('ishlittiman (❁´◡`❁)');
 }
 bootstrap();

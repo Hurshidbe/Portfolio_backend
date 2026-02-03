@@ -20,7 +20,7 @@ export class ContactService {
   }
 
   async find() {
-    return await this.ContactRepo.find();
+    return await this.ContactRepo.find().sort({createdAt : -1});
   }
 
   async findById(id: string) {

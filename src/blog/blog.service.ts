@@ -27,7 +27,7 @@ export class BlogService {
   }
 
   async get() {
-    return await this.blogRepo.find();
+    return await this.blogRepo.find().sort({createdAt : -1});
   }
 
   async getOne(id: string) {
