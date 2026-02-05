@@ -116,7 +116,7 @@ export class BlogController {
   @ApiOperation({summary : 'blog-postni delete qivorish'})
   async deleteOne(@Param('id') id: string) {
     try {
-      return await this.blogService.remove(id);
+      return this.blogService.remove(id);
     } catch (error) {
       throw new HttpException(error.messages, error.status ?? 500);
     }

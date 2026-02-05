@@ -1,6 +1,9 @@
 import { Prop } from '@nestjs/mongoose';
 import { ApiParam, ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsString, Length } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsDateString, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, Length } from 'class-validator';
+import { execArgv } from 'process';
+import { langDto } from 'src/shared/types';
 
 export class CreateExperienceDto {
   @ApiProperty({
@@ -12,23 +15,41 @@ export class CreateExperienceDto {
   @Length(2, 200)
   company: string;
 
+  @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
   @ApiProperty({
-    type: 'string',
+    type: langDto,
     description: 'roli',
-    example: 'junior backend-developer',
+    example: {
+      uz: "Kichik bekend dasturchi",
+      ru: "Младший бэкенд-разработчик",
+      en: "Junior backend developer"
+    },
   })
-  @IsString()
-  @Length(2, 200)
-  role: string;
+  @IsNotEmptyObject()
+  @IsObject()
+  role: langDto;
+
+  @Transform(({value})=>{return typeof value==='string' ? JSON.parse(value) : value})
+  @ApiProperty({
+    type : langDto,
+    example : {
+      uz : "Ushbu jumlalarning o'zbek, rus va ingliz tillaridagi ko'rinishi:TilTarjimasiO'zbek tiliMen bu yerda juda ko'p yangi narsalarni o'rgandim va eski bilimlarimni ham mustahkamladim, bu yerdagi ish jarayonimda 3 ta real proyekt qildim.",
+      ru : "Я узнал здесь много нового и закрепил свои старые знания, в процессе работы здесь я реализовал 3 реальных проекта.",
+      en : "I learned a lot of new things here and strengthened my existing knowledge; I completed 3 real-world projects during my work process here."
+    }
+  })
+  @IsObject()
+  @IsNotEmptyObject()
+  description: langDto;
 
   @ApiProperty({
-    type: 'string',
-    description: 'nimalar qilgani...',
-    example: 'toychani ishlab chiqdim',
+    type : 'string',
+    example : 'Yerni a*i',
   })
   @IsString()
-  @Length(0, 500)
-  description: string;
+  @IsNotEmpty()
+  @Length(1, 200)
+  location : string
 
   @ApiProperty({
     type: 'string',
