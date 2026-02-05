@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsDateString, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import { IsDate, IsDateString, IsNotEmpty, IsNotEmptyObject, IsObject, IsOptional, IsString, IsUrl, Length } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { langDto } from 'src/shared/types';
 
@@ -16,7 +16,7 @@ export class CreateAchievementDto {
   @IsObject()
   @Type(()=>langDto)
   name: langDto;
-  
+
   @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
   @ApiProperty({type : langDto,
     example: {
@@ -25,7 +25,7 @@ export class CreateAchievementDto {
     en: "I received this certificate for successfully completing the Backend-NodeJS course at the Fergana branch of Najot Ta'lim"
   }
   })
-  @IsNotEmpty()
+  @IsNotEmptyObject()
   @IsObject()
   description: langDto;
 
