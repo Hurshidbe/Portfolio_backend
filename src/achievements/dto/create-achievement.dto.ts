@@ -1,26 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsDateString, IsNotEmpty, IsOptional, IsString, IsUrl, Length } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsDate, IsDateString, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { langDto } from 'src/shared/types';
 
 export class CreateAchievementDto {
+  @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
   @ApiProperty({
-    description: 'sertifikat nomi',
-    example: "Najot ta'lim backend-nodeJs",
+    type : langDto,
+    example:{
+    uz: "Najot Ta'lim bitiruv sertifikati",
+    ru: "Выпускной сертификат Najot Ta'lim",
+    en: "Najot Ta'lim graduation certificate"
+  }})
+  @IsNotEmpty()
+  @IsObject()
+  @Type(()=>langDto)
+  name: langDto;
+  
+  @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
+  @ApiProperty({type : langDto,
+    example: {
+    uz: "Men bu sertifikatni Najot Ta'lim Farg'ona filialida Backend-NodeJS kursini muvaffaqiyatli tugatganim uchun olganman",
+    ru: "Я получил этот сертификат за успешное окончание курса Backend-NodeJS в Ферганском филиале Najot Ta'lim",
+    en: "I received this certificate for successfully completing the Backend-NodeJS course at the Fergana branch of Najot Ta'lim"
+  }
   })
   @IsNotEmpty()
-  @IsString()
-  @Length(2, 200)
-  name: string;
-
-  @ApiProperty({
-    description: "qisqacha ta'rif",
-    example:
-      "Najot ta'limda backend-nodeJs kursini muvaffaqiyatli tugatdim",
-  })
-  @IsNotEmpty()
-  @IsString()
-  @Length(2, 500)
-  description: string;
+  @IsObject()
+  description: langDto;
 
   @ApiProperty({
     required: false,

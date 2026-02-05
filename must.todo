@@ -8,23 +8,28 @@
           "content": "blog/updateById--- if user do not send photo while updating blog-post backend saving empty array to photos field",
           "id": 1767786207695,
           "level": "secondary",
-          "done": false,
-          "start": 1767786207695
+          "done": true,
+          "start": 1767786207695,
+          "focus": false,
+          "end": 1770284230725
         }
       },
       {
-        "key": 1767786511773,
+        "key": 1770284196758,
         "children": [],
         "todo": {
-          "content": "",
-          "id": 1767786511773,
+          "content": "must fix origin before containarization",
+          "id": 1770284196758,
           "level": "default",
           "done": false,
-          "start": 1767786511774
+          "start": 1770284196758,
+          "focus": false
         }
       }
     ],
-    "expandKeys": [],
+    "expandKeys": [
+      1767786207695
+    ],
     "schema": "https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L3",
     "add_mode": "bottom",
     "virtual": false,
@@ -36,6 +41,6 @@
     "showEndTime": false,
     "simpleMode": false,
     "lang": "en",
-    "version": "1767786511834"
+    "version": "1770284230744"
   }
 }

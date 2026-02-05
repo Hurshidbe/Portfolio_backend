@@ -1,27 +1,17 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateAchievementDto } from './create-achievement.dto';
-import { IsDate, IsDateString, IsNotEmpty, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import { IsDate, IsDateString, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import { langDto } from 'src/shared/types';
+import { Type } from 'class-transformer';
 
 export class UpdateAchievementDto extends PartialType(CreateAchievementDto) {
-    @ApiProperty({
-        description: 'sertifikat nomi',
-        example: "Najot ta'lim backend-nodeJs",
-      })
-      @IsOptional()
-      @IsNotEmpty()
-      @IsString()
-      @Length(2, 200)
-      name?: string;
+    @ApiProperty({type : langDto})
+    @IsOptional()
+    @Type(()=>langDto)
+    name?: langDto;
     
-      @ApiProperty({
-        description: "qisqacha ta'rif",
-        example:
-          "Najot ta'limda backend-nodeJs kursini muvaffaqiyatli tugatdim",
-      })
-      @IsNotEmpty()
-      @IsString()
-      @Length(2, 500)
-      description: string;
+    @ApiProperty({type : langDto})
+      description?: langDto;
     
       @ApiProperty({
         required: false,
