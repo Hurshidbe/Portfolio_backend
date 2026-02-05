@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import type { lang } from "src/shared/types";
 
 @Schema({timestamps : true})
 export class Achievement {
-    @Prop()
-    name : string
+    @Prop({type : Object})
+    name : lang
 
-    @Prop()
-    description : string
+    @Prop({type : Object})
+    description : lang
 
     @Prop({required : false})
     photos? : string
