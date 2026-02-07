@@ -1,7 +1,7 @@
 import { Prop } from '@nestjs/mongoose';
 import { ApiParam, ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsDateString, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, Length } from 'class-validator';
+import { IsDate, IsDateString, IsNotEmpty, IsNotEmptyObject, IsObject, IsString, Length } from 'class-validator';
 import { execArgv } from 'process';
 import { langDto } from 'src/shared/types';
 
@@ -56,7 +56,7 @@ export class CreateExperienceDto {
     description: 'tashkilotda ish boshlagan sanasi',
     example: '1988-12-12',
   })
-  @IsDateString()
+  @IsDate()
   from: Date;
 
   @ApiProperty({
@@ -64,6 +64,6 @@ export class CreateExperienceDto {
     description: 'tashkilotdan haydalgan sanasi, kiritilmasa ham bo`laveradi',
     example: '2005-12-12',
   })
-  @IsDateString()
+  @IsDate()
   to?: Date;
 }

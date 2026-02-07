@@ -1,21 +1,30 @@
-import { IsString, Length } from "class-validator";
+import { Prop } from "@nestjs/mongoose";
+import { IsString, Length, IsNotEmpty } from "class-validator";
 
-export interface lang {
-    uz: string;
-    ru: string;
-    en: string;
+export class Lang {
+  @Prop({ required: true })
+  uz: string;
+
+  @Prop({ required: true })
+  ru: string;
+
+  @Prop({ required: true })
+  en: string;
 }
 
 export class langDto {
     @IsString()
-    @Length(0, 5000)
-    uz : string =""
+    @Length(1, 5000)
+    @IsNotEmpty()
+    uz: string;
 
     @IsString()
-    @Length(0, 5000)
-    ru : string =""
+    @Length(1, 5000)
+    @IsNotEmpty()
+    ru: string;
 
     @IsString()
-    @Length(0, 5000)
-    en : string=""
+    @Length(1, 5000)
+    @IsNotEmpty()
+    en: string;
 }

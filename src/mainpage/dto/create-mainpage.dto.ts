@@ -1,31 +1,49 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString, IsUrl } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsArray, IsNotEmptyObject, IsObject, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { langDto } from 'src/shared/types';
 
 export class CreateProfileDto {
   @ApiProperty({ example: 'Baqay tog`a' })
   @IsString()
   full_name: string;
 
-  @ApiProperty({ required: true, description: 'kasbi', example: 'loychi' })
-  @IsString()
-  profession: string;
-
+  @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
+  @Type(()=>langDto)
   @ApiProperty({
-    description: 'O`zi haqida ma`lumot',
-    required: false,
-    example: `to'g'risini aytadigan bo'lsam men dunyoni 8-mo'jizasimanda😁`,
+    type : langDto,
+    required : true,
+    example : {
+      uz: "Kichik bekend dasturchi",
+      ru: "Младший бэкенд-разработчик",
+      en: "Junior backend developer"
+    }
   })
-  @IsString()
-  @IsOptional()
-  profession_add?: string;
+  @IsObject()
+  @IsNotEmptyObject()
+  profession: langDto;
+
+  @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
+  @Type(()=>langDto)
+  @ApiProperty({
+    required : true,
+    type : langDto,
+    example : {
+      uz:"Yangi narsalarni o'rganishdan zerikmaydigan backend dasturchi",
+      ru:"Бэкенд-разработчик, который никогда не устает изучать новое",
+      en:"A backend developer who never gets bored of learning new things",
+    }
+  })
+  @IsObject()
+  @IsNotEmptyObject()
+  profession_add: langDto;
 
   @ApiProperty({ description: 'manzil', required: false, example: 'xuytepa mahallasi' })
   @IsString()
   @IsOptional()
   address?: string;
 
-  @ApiProperty({ description: 'Github URL', required: false, example: 'https://github.com/baqay' })
+  @ApiProperty({ description: 'Github URL', required:false, example: 'https://github.com/baqay' })
   @IsUrl()
   @IsOptional()
   github?: string;
@@ -40,7 +58,7 @@ export class CreateProfileDto {
   @IsOptional()
   linkedin?: string;
 
-  @ApiProperty({ description: 'Skills', type: [String], required: false })
+  @ApiProperty({ description: 'Skills', type: [String], required:false })
   @IsOptional()
   @Transform(({ value }) => {
     if (typeof value === 'string') {
@@ -71,6 +89,7 @@ export class CreateProfileDto {
   tools?: string[];
 
   @ApiProperty({
+    type: 'string',
     format: 'binary',
     description: 'Profil rasmi(1 dona rasm bo`lishi shart)',
     required: false,

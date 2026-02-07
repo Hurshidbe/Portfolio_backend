@@ -1,7 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateBlogDto } from './create-blog.dto';
-import { IsOptional, IsString, Length } from 'class-validator';
+import { IsNotEmptyObject, IsObject, IsOptional, IsString, Length, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
+import { langDto } from 'src/shared/types';
 
 export class UpdateBlogDto extends PartialType(CreateBlogDto) {
   @ApiProperty({
@@ -12,15 +14,30 @@ export class UpdateBlogDto extends PartialType(CreateBlogDto) {
   @IsOptional()
   photos?: any[];
 
-  @ApiProperty({ type: String , required : false})
+  @Transform(({value})=>{return typeof value==='string' ? JSON.parse(value) : value})
+  @ApiProperty({
+    type: langDto,
+    example: {
+      uz: 'Blog sarlavhasi',
+      ru: 'Заголовок блога',
+      en: 'Blog title'
+    }
+  })
   @IsOptional()
-  @IsString()
-  @Length(2, 500)
-  title?: string;
+  @IsObject()
+  title?: langDto;
 
-  @ApiProperty({ type: String, required : false })
-  @IsOptional()
-  @IsString()
-  @Length(0, 1000)
-  description?: string;
-}
+  @Transform(({value})=>{return typeof value==='string' ? JSON.parse(value) : value})
+  @Type(() => langDto)
+  @ApiProperty({
+    type: langDto,
+    example: {
+      uz: 'Blog matni',
+       ru: 'Содержание блога',
+       en: 'Blog content'
+     }
+  })
+   @IsOptional()
+   @IsObject()
+   description?: langDto
+  }

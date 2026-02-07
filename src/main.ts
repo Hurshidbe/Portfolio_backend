@@ -8,9 +8,12 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({ 
-      transform : true,
-      forbidNonWhitelisted: true, 
-      whitelist: true }),);
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      }
+    })
+  );
   app.enableCors({ origin: '*' }); // mvp dan oldin must change
   const config = new DocumentBuilder()
     .setTitle('Portfolio-Swagger')

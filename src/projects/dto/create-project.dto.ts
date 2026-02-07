@@ -4,11 +4,13 @@ import {
   IsArray,
   IsDateString,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   IsUrl,
   Length,
 } from 'class-validator';
+import { langDto } from 'src/shared/types';
 
 export class CreateProjectDto {
   @ApiProperty({
@@ -26,14 +28,19 @@ export class CreateProjectDto {
   @Length(2, 100)
   project_name: string;
 
+  @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
   @ApiProperty({
     description : 'project haqida qisqacha ma`lumot',
-    type: 'string',
-    example: 'karochi dastur deliver - marketlar to`grisida',
+    type: langDto,
+    example: {
+      uz :"Yuqori yuklamali tizimlar va samarali API-lar yaratuvchi backend dasturchiman. Murakkab muammolarga sodda va optimal texnik yechimlar topishni yoqtiraman.",
+      ru: "Backend-разработчик, специализирующийся на высоконагруженных системах и эффективных API. Создаю чистый код и оптимальные архитектурные решения",
+      en: "Backend developer focused on building high-load systems and efficient APIs. I enjoy finding simple and optimal technical solutions to complex problems."
+    },
   })
-  @IsString()
-  @Length(1, 500)
-  description?: string;
+  @IsObject()
+  @IsOptional()
+  description?: langDto;
 
   @ApiProperty({ type: 'string', example: 'https://google.com', description : 'project linki' })
   @IsNotEmpty()

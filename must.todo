@@ -25,6 +25,71 @@
           "start": 1770284196758,
           "focus": false
         }
+      },
+      {
+        "key": 1770450085328,
+        "children": [],
+        "todo": {
+          "content": "achievements",
+          "id": 1770450085328,
+          "level": "default",
+          "done": true,
+          "start": 1770450085328,
+          "focus": false,
+          "end": 1770450796967
+        }
+      },
+      {
+        "key": 1770450100559,
+        "children": [],
+        "todo": {
+          "content": "blog",
+          "id": 1770450100559,
+          "level": "default",
+          "done": true,
+          "start": 1770450100559,
+          "focus": false,
+          "end": 1770450888079
+        }
+      },
+      {
+        "key": 1770450103607,
+        "children": [],
+        "todo": {
+          "content": "experience",
+          "id": 1770450103607,
+          "level": "default",
+          "done": true,
+          "start": 1770450103607,
+          "focus": false,
+          "end": 1770451183959
+        }
+      },
+      {
+        "key": 1770450119887,
+        "children": [],
+        "todo": {
+          "content": "mainnpage",
+          "id": 1770450119887,
+          "level": "default",
+          "done": true,
+          "start": 1770450119887,
+          "focus": false,
+          "end": 1770451228711
+        }
+      },
+      {
+        "key": 1770450127807,
+        "children": [],
+        "todo": {
+          "content": "projects",
+          "id": 1770450127807,
+          "level": "default",
+          "done": true,
+          "start": 1770450127807,
+          "focus": false,
+          "end": 1770451353919
+        }
       }
     ],
     "expandKeys": [
@@ -41,6 +106,6 @@
     "showEndTime": false,
     "simpleMode": false,
     "lang": "en",
-    "version": "1770284230744"
+    "version": "1770451353946"
   }
 }

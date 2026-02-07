@@ -24,7 +24,7 @@ export class ContactController {
     try {
       return await this.contactService.create(dto);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -36,7 +36,7 @@ export class ContactController {
     try {
       return await this.contactService.find();
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -48,7 +48,7 @@ export class ContactController {
     try {
       return await this.contactService.findById(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -61,7 +61,7 @@ export class ContactController {
     try {
       return await this.contactService.deleteById(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 }
