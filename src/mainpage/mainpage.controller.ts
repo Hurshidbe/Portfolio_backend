@@ -38,7 +38,6 @@ export class MainpageController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreateProfileDto })
   @ApiOperation({summary : 'main page uchun data yaratish. (faqat bitta yaratiladi)'})
-
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -79,10 +78,9 @@ export class MainpageController {
 
         createMainpageDto.cv = `/uploads/cv/${filename}`;
       }
-
       return await this.mainpageService.create(createMainpageDto);
     } catch (error: any) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -124,17 +122,13 @@ export class MainpageController {
 
         if (!fs.existsSync(cvFolder))
           fs.mkdirSync(cvFolder, { recursive: true });
-
         const oldFiles = fs.readdirSync(cvFolder);
-        for (const f of oldFiles) fs.unlinkSync(path.join(cvFolder, f));
-
+        for (const f of oldFiles) fs.unlinkSync(path.join(cvFolder, f))
         const filename = `hurshidbe_${cvFile.originalname}`;
         const filepath = path.join(cvFolder, filename);
         fs.writeFileSync(filepath, cvFile.buffer);
-
         updateMainpageDto.cv = `/uploads/cv/${filename}`;
       }
-
       return await this.mainpageService.updateById(id, updateMainpageDto);
     } catch (error: any) {
       throw new HttpException(error.message, error.status ?? 500);
@@ -147,13 +141,12 @@ export class MainpageController {
     try {
       const cvFolder = path.join(__dirname, '../../uploads/cv');
       const files = fs.readdirSync(cvFolder);
-
       if (!files.length) throw new HttpException('CV not found', 404);
 
       const filepath = path.join(cvFolder, files[0]);
       res.download(filepath, files[0]);
     } catch (error: any) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -167,7 +160,7 @@ export class MainpageController {
       );
       return await this.mainpageService.find();
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 }

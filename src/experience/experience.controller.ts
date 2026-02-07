@@ -27,7 +27,7 @@ export class ExperienceController {
     try {
       return await this.experienceService.create(createExperienceDto);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -37,7 +37,7 @@ export class ExperienceController {
     try {
       return await this.experienceService.findAll();
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -47,7 +47,7 @@ export class ExperienceController {
     try {
       return await this.experienceService.findOne(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -62,7 +62,7 @@ export class ExperienceController {
     try {
       return await this.experienceService.update(id, updateExperienceDto);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -74,7 +74,7 @@ export class ExperienceController {
     try {
       return await this.experienceService.remove(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 }

@@ -40,7 +40,6 @@ export class AchievementsController {
       }
       return await this.achievementsService.create(createAchievementDto);
     } catch (error) {
-      console.log(error)
       throw new HttpException(error.message , error.status??500)
     }
   }
@@ -87,7 +86,11 @@ export class AchievementsController {
     const result = await this.cloudinaryService.uploadImage(file);
     if (result?.secure_url) dto.photos = result.secure_url;
   }
-  return await this.achievementsService.update(id, dto);
+  try {
+    return await this.achievementsService.update(id, dto);
+  } catch (error) {
+    throw new HttpException(error.message , error.status ??500)
+  }
 }
 
   @UseGuards(AuthGuard)
@@ -95,6 +98,10 @@ export class AchievementsController {
   @ApiBearerAuth(`JWT-auth`)
   @ApiOperation({summary:`postni id si orqali delete qilish`})
   remove(@Param('id') id: string) {
-    return this.achievementsService.remove(id);
+    try {
+      return this.achievementsService.remove(id);
+    } catch (error) {
+      throw new HttpException(error.message , error.status ??500)
+    }
   }
 }

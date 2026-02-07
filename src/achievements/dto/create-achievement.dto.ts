@@ -1,32 +1,46 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsDateString, IsNotEmpty, IsNotEmptyObject, IsObject, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import { 
+  IsDate,
+  IsDateString, 
+  IsNotEmpty, 
+  IsNotEmptyObject, 
+  IsObject, 
+  IsOptional, 
+  IsString, 
+  IsUrl, 
+  Length, 
+  ValidateNested 
+} from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { langDto } from 'src/shared/types';
 
 export class CreateAchievementDto {
-  @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
+  @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
+  @Type(() => langDto)
   @ApiProperty({
-    type : langDto,
-    example:{
-    uz: "Najot Ta'lim bitiruv sertifikati",
-    ru: "Выпускной сертификат Najot Ta'lim",
-    en: "Najot Ta'lim graduation certificate"
-  }})
-  @IsNotEmpty()
+    type: langDto,
+    example: {
+      uz: "Najot Ta'lim bitiruv sertifikati",
+      ru: "Выпускной сертификат Najot Ta'lim",
+      en: "Najot Ta'lim graduation certificate"
+    }
+  })
   @IsObject()
-  @Type(()=>langDto)
+  @IsNotEmptyObject()
   name: langDto;
 
-  @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
-  @ApiProperty({type : langDto,
+  @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
+  @Type(() => langDto)
+  @ApiProperty({
+    type: langDto,
     example: {
-    uz: "Men bu sertifikatni Najot Ta'lim Farg'ona filialida Backend-NodeJS kursini muvaffaqiyatli tugatganim uchun olganman",
-    ru: "Я получил этот сертификат за успешное окончание курса Backend-NodeJS в Ферганском филиале Najot Ta'lim",
-    en: "I received this certificate for successfully completing the Backend-NodeJS course at the Fergana branch of Najot Ta'lim"
-  }
+      uz: "Men bu sertifikatni Najot Ta'lim Farg'ona filialida Backend-NodeJS kursini muvaffaqiyatli tugatganim uchun olganman",
+      ru: "Я получил этот сертификат за успешное окончание курса Backend-NodeJS в Ферганском филиале Najot Ta'lim",
+      en: "I received this certificate for successfully completing the Backend-NodeJS course at the Fergana branch of Najot Ta'lim"
+    }
   })
-  @IsNotEmptyObject()
   @IsObject()
+  @IsNotEmptyObject()
   description: langDto;
 
   @ApiProperty({
@@ -51,6 +65,6 @@ export class CreateAchievementDto {
     example: '2025-10-15',
   })
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   date?: Date;
 }

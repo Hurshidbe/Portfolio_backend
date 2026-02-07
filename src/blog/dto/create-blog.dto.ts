@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, Length } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsNotEmptyObject, IsObject, IsOptional, ValidateNested } from 'class-validator';
+import { langDto } from 'src/shared/types';
 
 export class CreateBlogDto {
   @ApiProperty({
@@ -11,14 +13,31 @@ export class CreateBlogDto {
   @IsOptional()
   photos?: any[];
 
-  @ApiProperty({ type: String, description: 'sarlavha' })
-  @IsString()
-  @Length(2, 500)
-  title: string;
+  @Transform(({value})=>{return typeof value==='string' ? JSON.parse(value) : value})
+  @Type(() => langDto)
+  @ApiProperty({
+    type: langDto,
+    example: {
+      uz: 'Blog sarlavhasi',
+      ru: 'Заголовок блога',
+      en: 'Blog title'
+    }
+  })
+  @IsNotEmptyObject()
+  @IsObject()
+  title: langDto;
 
-  @ApiProperty({ type: String, description: 'blog-post matni' })
+  @Transform(({value})=>{return typeof value==='string' ? JSON.parse(value) : value})
+  @Type(() => langDto)
+  @ApiProperty({
+    type: langDto,
+    example: {
+      uz: 'Blog matni',
+      ru: 'Содержание блога',
+      en: 'Blog content'
+    }
+  })
   @IsOptional()
-  @IsString()
-  @Length(0, 1000)
-  description?: string;
+  @IsObject()
+  description?: langDto;
 }

@@ -54,7 +54,7 @@ export class BlogController {
       dto.photos = photosResults.map((r) => r.secure_url);
       return await this.blogService.create(dto);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -64,7 +64,7 @@ export class BlogController {
     try {
       return await this.blogService.get();
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -75,7 +75,7 @@ export class BlogController {
       await this.blogService.addView(id)
       return await this.blogService.getOne(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -106,7 +106,7 @@ export class BlogController {
       const result = await this.blogService.update(id, dto);
       return result;
     } catch (error) {
-      throw new HttpException(error.message, error.status ?? 500);
+      throw new HttpException(error.message, error.status ??500);
     }
   }
 
@@ -118,7 +118,7 @@ export class BlogController {
     try {
       return this.blogService.remove(id);
     } catch (error) {
-      throw new HttpException(error.messages, error.status ?? 500);
+      throw new HttpException(error.messages, error.status ??500);
     }
   }
 }

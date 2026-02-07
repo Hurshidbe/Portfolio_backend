@@ -1,7 +1,8 @@
 // update-profile.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsString, IsArray, IsOptional, IsUrl } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsString, IsArray, IsOptional, IsUrl, IsObject } from 'class-validator';
+import { langDto } from 'src/shared/types';
 
 export class UpdateProfileDto {
   @ApiProperty({ required : false,example: 'Toqay tog`a' })
@@ -9,19 +10,35 @@ export class UpdateProfileDto {
     @IsString()
     full_name?: string;
   
-    @ApiProperty({ required : false , description: 'kasbi', example: 'loychi' })
-    @IsOptional()
-    @IsString()
-    profession?: string;
-  
+    @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
+    @Type(()=>langDto)
     @ApiProperty({
       description: 'Ozi haqida ma`lumot',
       required: false,
-      example: `to'g'risini aytadigan bo'lsam men dunyoni 8-mo'jizasimanda😁`,
+      example:{
+        uz:"Kichik front-end dasturchi",
+        ru:"Младший фронтенд-разработчик",
+        en:"Junior frontend developer"
+      },
     })
-    @IsString()
+    @IsObject()
     @IsOptional()
-    profession_add?: string;
+    profession?: langDto;
+  
+    @Transform(({ value }) => typeof value === 'string' ? JSON.parse(value) : value)
+    @Type(()=>langDto)
+    @ApiProperty({
+      description: 'Ozi haqida ma`lumot',
+      required: false,
+      example:{
+        uz:"To'g'risini aytadigan bo'lsam, men dunyoning sakkizinchi mo'jizasiman😁",
+        ru:"Честно говоря, я — восьмое чудо света😁",
+        en:"To be honest, I am the eighth wonder of the world😁"
+      },
+    })
+    @IsObject()
+    @IsOptional()
+    profession_add?: langDto;
   
     @ApiProperty({ description: 'manzil', required: false, example: 'xuytepa mahallasi' })
     @IsString()

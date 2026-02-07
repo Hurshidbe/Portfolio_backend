@@ -1,18 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Lang } from 'src/shared/types';
 
 @Schema()
 export class Main {
   @Prop()
-  photos: string[];
+  photos: any[];
 
   @Prop()
   full_name: string;
 
   @Prop()
-  profession: string;
+  profession: Lang;
 
   @Prop()
-  profession_add: string;
+  profession_add: Lang;
 
   @Prop()
   address: string;

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import type { Lang } from 'src/shared/types';
 
 @Schema({ timestamps: true })
 export class Project {
@@ -8,8 +9,8 @@ export class Project {
   @Prop()
   project_name: string;
 
-  @Prop({ default: '' })
-  description: string;
+  @Prop()
+  description: Lang;
 
   @Prop()
   project_url: string;

@@ -56,7 +56,7 @@ export class ProjectsController {
 
       return await this.projectsService.create(createProjectDto);
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status??500);
     }
   }
 
@@ -66,7 +66,7 @@ export class ProjectsController {
     try {
       return this.projectsService.findAll();
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status??500);
     }
   }
 
@@ -76,7 +76,7 @@ export class ProjectsController {
     try {
       return await this.projectsService.findOne(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status??500);
     }
   }
 
@@ -109,7 +109,7 @@ export class ProjectsController {
 
       return this.projectsService.update(id, updateProjectDto);
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status??500);
     }
   }
 
@@ -121,7 +121,7 @@ export class ProjectsController {
     try {
       return this.projectsService.remove(id);
     } catch (error) {
-      throw new HttpException(error.message, error.status || 500);
+      throw new HttpException(error.message, error.status??500);
     }
   }
 }

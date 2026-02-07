@@ -1,9 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateExperienceDto } from './create-experience.dto';
-import { IsDateString, IsObject, IsOptional, IsString, Length } from 'class-validator';
+import { IsDate, IsDateString, IsObject, IsOptional, IsString, Length, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { lang, langDto } from 'src/shared/types';
+import { Transform, Type } from 'class-transformer';
+import {  langDto } from 'src/shared/types';
 
 export class UpdateExperienceDto extends PartialType(CreateExperienceDto) {
   @ApiProperty()
@@ -13,6 +13,7 @@ export class UpdateExperienceDto extends PartialType(CreateExperienceDto) {
   company?: string;
 
   @Transform(({ value }) => {return typeof value === 'string' ? JSON.parse(value) : value})
+  @Type(() => langDto)
     @ApiProperty({
       type: langDto,
       description: 'roli',
@@ -26,15 +27,18 @@ export class UpdateExperienceDto extends PartialType(CreateExperienceDto) {
     @IsObject()
     role?: langDto;
 
+  
   @Transform(({value})=>{return typeof value==='string' ? JSON.parse(value) : value})
+  @Type(() => langDto)
     @ApiProperty({
       type : langDto,
       example : {
-        uz : "Ushbu jumlalarning o'zbek, rus va ingliz tillaridagi ko'rinishi:TilTarjimasiO'zbek tiliMen bu yerda juda ko'p yangi narsalarni o'rgandim va eski bilimlarimni ham mustahkamladim, bu yerdagi ish jarayonimda 3 ta real proyekt qildim.",
+        uz : "Men bu yerda juda ko'p yangi narsalarni o'rgandim va eski bilimlarimni ham mustahkamladim, bu yerdagi ish jarayonimda 3 ta real proyekt qildim.",
         ru : "Я узнал здесь много нового и закрепил свои старые знания, в процессе работы здесь я реализовал 3 реальных проекта.",
         en : "I learned a lot of new things here and strengthened my existing knowledge; I completed 3 real-world projects during my work process here."
       }
     })
+    @IsOptional()
     @IsObject()
    description?: langDto;
 
@@ -50,11 +54,11 @@ export class UpdateExperienceDto extends PartialType(CreateExperienceDto) {
 
   @ApiProperty()
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   from?: Date;
 
   @ApiProperty()
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   to?: Date;
 }

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Lang } from 'src/shared/types';
 
 @Schema({timestamps : true})
 export class Blog {
@@ -6,10 +7,10 @@ export class Blog {
   photos?: string[];
 
   @Prop()
-  title: string;
+  title: Lang;
 
-  @Prop({ required: false })
-  description?: string;
+  @Prop({required: false, type : Object })
+  description?: Lang;
 
   @Prop({ required: false, default: 0 })
   views?: number;

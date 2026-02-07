@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { langDto, type lang } from 'src/shared/types';
+import type{ Lang, langDto } from 'src/shared/types';
 
 @Schema()
 export class Experience {
@@ -7,10 +7,13 @@ export class Experience {
   company: string;
 
   @Prop({type : Object})
-  role: lang;
+  role: Lang;
 
   @Prop({ required: false, type: Object })
-  description?: lang;
+  description?: Lang;
+
+  @Prop()
+  location : string
 
   @Prop()
   from: Date;
