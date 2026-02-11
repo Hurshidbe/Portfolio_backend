@@ -1,24 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Start, Update } from "nestjs-telegraf";
+import { Context, Markup } from "telegraf";
 
-@Injectable()
+@Update()
 export class BotService {
-  create() {
-    return 'This action adds a new bot';
-  }
-
-  findAll() {
-    return `This action returns all bot`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} bot`;
-  }
-
-  update(id: number) {
-    return `This action updates a #${id} bot`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} bot`;
+  @Start()
+  async startCommand(ctx: Context) {
+    await ctx.reply(
+      'Bolimni tanlang:',
+      Markup.keyboard([
+        ['Xizmatlar', 'Biz haqimizda'],
+        ['Aloqa'],
+      ])
+      .resize()
+      .oneTime()
+    );
   }
 }
