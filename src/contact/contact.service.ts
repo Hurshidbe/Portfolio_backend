@@ -22,6 +22,7 @@ export class ContactService {
       theme: dto.theme,
     });
     await this.messager.sendContact(message.name, message.phone_tg, message.theme, message.text)
+    return message
   }
 
   async find() {

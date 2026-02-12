@@ -17,6 +17,6 @@ dotenv.config()
 })
   ],
   providers: [BotService, MessageSender],
-  exports : [BotService]
+  exports : [BotService, MessageSender]
 })
 export class BotModule {}
