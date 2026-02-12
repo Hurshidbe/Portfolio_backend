@@ -28,6 +28,9 @@ export class Main {
   linkedin: string; // linkedin URI
 
   @Prop()
+  instagram: string; // linkedin URI
+
+  @Prop()
   cv: string; // CV URI
 
   @Prop([String])

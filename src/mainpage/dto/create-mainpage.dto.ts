@@ -58,6 +58,11 @@ export class CreateProfileDto {
   @IsOptional()
   linkedin?: string;
 
+  @ApiProperty({ description: 'Instagram URL', required: false, example: 'https://t.me/baqay' })
+  @IsUrl()
+  @IsOptional()
+  instagram?: string;
+
   @ApiProperty({ description: 'Skills', type: [String], required:false })
   @IsOptional()
   @Transform(({ value }) => {
