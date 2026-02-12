@@ -5,14 +5,11 @@ import { Context, Markup } from "telegraf";
 export class BotService {
   @Start()
   async startCommand(ctx: Context) {
-    await ctx.reply(
-      'Bolimni tanlang:',
-      Markup.keyboard([
-        ['Xizmatlar', 'Biz haqimizda'],
-        ['Aloqa'],
-      ])
-      .resize()
-      .oneTime()
-    );
+    if (ctx.from?.username === 'Hursheed') {
+      await ctx.reply('Assalomu alaykum Xurshidbek, admin tasdiqlandi');
+    } else {
+      await ctx.reply('Ushbu bot siz uchun ishlamaydi');
+    }
   }
 }
+

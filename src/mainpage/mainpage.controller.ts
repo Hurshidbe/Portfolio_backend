@@ -158,6 +158,7 @@ export class MainpageController {
         req.ip || '',
         req.headers['user-agent'] || '',
       );
+      console.log(req.ip)
       return await this.mainpageService.find();
     } catch (error) {
       throw new HttpException(error.message, error.status ??500);
