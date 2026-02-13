@@ -13,6 +13,7 @@ import * as dotenv from 'dotenv';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './guards/AuthGuard';
 import { AchievementsModule } from './achievements/achievements.module';
+import { CacheModule } from '@nestjs/cache-manager';
 dotenv.config();
 
 @Module({
@@ -25,6 +26,10 @@ dotenv.config();
       }
     }),
     MongooseModule.forRoot(process.env.DB || ''),
+    CacheModule.register({
+      ttl : 86400,
+      isGlobal : true
+    }),
     AuthModule,
     MainpageModule,
     ExperienceModule,
