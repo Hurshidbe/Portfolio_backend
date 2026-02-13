@@ -10,6 +10,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -70,9 +71,12 @@ export class BlogController {
 
   @Get(':id')
   @ApiOperation({summary : 'postni Idsi bilan ko`rish'})
-  async One(@Param('id') id: string) {
+  async One(
+    @Param('id') id: string,
+    @Req() req : any
+  ) {
     try {
-      await this.blogService.addView(id)
+      await this.blogService.addView(id, req.ip)
       return await this.blogService.getOne(id);
     } catch (error) {
       throw new HttpException(error.message, error.status ??500);

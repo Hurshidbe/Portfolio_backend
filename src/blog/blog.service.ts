@@ -3,15 +3,21 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog } from './entities/blog.entity';
 import { Model } from 'mongoose';
+import type { Cache } from 'cache-manager';
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class BlogService {
-  constructor(@InjectModel(Blog.name) private readonly blogRepo: Model<Blog>) {}
+  constructor(
+    @InjectModel(Blog.name) private readonly blogRepo: Model<Blog>,
+    @Inject(CACHE_MANAGER) private cacheManager : Cache
+  ) {}
 
   async create(dto: CreateBlogDto) {
     return await this.blogRepo.create(dto);
@@ -22,8 +28,12 @@ export class BlogService {
     return await this.blogRepo.findByIdAndUpdate(id, dto, { new: true });
   }
 
-  async addView(id : string){
-    return await this.blogRepo.findByIdAndUpdate(id, {$inc:{views: +1}}, {new : true})
+  async addView(id : string, ip : string){
+    const isWatchedBefore = await this.cacheManager.get(`${id}${ip}`)
+    if(!isWatchedBefore){
+      await this.cacheManager.set(`${id}${ip}`, Date.now(),86400)
+      return await this.blogRepo.findByIdAndUpdate(id, {$inc:{views: +1}}, {new : true})}
+      else return
   }
 
   async get() {
