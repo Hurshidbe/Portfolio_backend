@@ -31,7 +31,7 @@ export class BlogService {
   async addView(id : string, ip : string){
     const isWatchedBefore = await this.cacheManager.get(`${id}${ip}`)
     if(!isWatchedBefore){
-      await this.cacheManager.set(`${id}${ip}`, Date.now(),86400)
+      await this.cacheManager.set(`${id}${ip}`, Date.now(),864000)
       return await this.blogRepo.findByIdAndUpdate(id, {$inc:{views: +1}}, {new : true})}
       else return
   }
