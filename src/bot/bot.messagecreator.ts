@@ -25,7 +25,7 @@ export class MessageSender {
         const full_text = `
 <b>Portfolio saytiga yangi tashrifchi!</b>
 <b>📍 IP manzil:</b> ${ip}
-<b>💻 qurilma:\n</b> ${device}`
+<b>💻 qurilma:\n    </b> ${device}`
             await this.bot.telegram.sendMessage(this.userId, full_text, {parse_mode : 'HTML'})
     }
 }

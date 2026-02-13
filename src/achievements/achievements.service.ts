@@ -26,14 +26,11 @@ export class AchievementsService {
       return data
   }
 
-  async update(id: string, dto: UpdateAchievementDto) {
-    const data: any = { ...dto };
-    if (!data.photos) delete data.photos;
-      const updated = await this.achievementRepo.findByIdAndUpdate(id, data, { new: true });
-      if (!updated) throw new NotFoundException('achievement not found');
-        return updated;
+  async update(id: string, updateAchievementDto: UpdateAchievementDto) {
+    const updated= await this.achievementRepo.findByIdAndUpdate(id, updateAchievementDto, {new : true});
+    if(!updated) throw new NotFoundException('certificate not found')
+      return updated
   }
-
 
   async remove(id: string) {
     const deleting = await this.achievementRepo.findByIdAndDelete(id)

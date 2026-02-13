@@ -6,7 +6,7 @@ export class Blog {
   @Prop({ required: false })
   photos?: string[];
 
-  @Prop()
+  @Prop({type : Object})
   title: Lang;
 
   @Prop({required: false, type : Object })
