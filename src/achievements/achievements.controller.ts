@@ -6,7 +6,6 @@ import { AuthGuard } from 'src/guards/AuthGuard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import e from 'express';
 
 @Controller('achievements')
 export class AchievementsController {
