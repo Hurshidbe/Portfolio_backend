@@ -14,7 +14,11 @@ async function bootstrap() {
       }
     })
   );
-  app.enableCors({ origin: '*' }); // mvp dan oldin must change
+  const origins = process.env.ORIGIN ? process.env.ORIGIN.split(',') : '*';
+  app.enableCors({
+    origin: origins,
+    credentials: true,
+  });
   const config = new DocumentBuilder()
     .setTitle('Portfolio-Swagger')
     .setVersion('1.0')
@@ -34,6 +38,8 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
   await app.listen(process.env.PORT ?? 3000);
   console.warn(`server is runnning port on ${process.env.PORT}`);
+  console.log('ORIGIN env:', process.env.ORIGIN);
+  console.log('CORS origins:', origins);
   console.log('ishlittiman (❁´◡`❁)');
 }
 bootstrap();
